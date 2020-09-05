@@ -3,7 +3,7 @@ const { Message, Client, MessageEmbed } = require("discord.js");
 module.exports = {
   name: "rrdel",
   description: "Delete a reaction role",
-  category: "reactionroles",
+  category: "utility",
   usage: "?rrdel <id of the message> <id of the role thats added to the reaction>",
   /**
    * @param {Client} bot

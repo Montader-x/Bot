@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-
+const db = require('quick.db')
 module.exports = {
   name: "mute",
   description: "Mute anyone who break rules",
@@ -36,11 +36,11 @@ module.exports = {
     
   //TIME TO LET MUTED ROLE
     
-    let muterole = message.guild.roles.cache.find(x => x.name === "Muted")
+    let muterole = db.get(`muteRole_${message.guild.id}`)
     
     
       if(!muterole) {
-      return message.channel.send("This server do not have role with name `Muted`")
+      return message.channel.send("Please set the mute role first")
     }
     
     
@@ -51,11 +51,11 @@ module.exports = {
   
     
     
-    user.roles.add(muterole)
+    user.roles.add(muterole.id)
     
 await message.channel.send(`You muted **${message.mentions.users.first().username}** For \`${reason}\``)
     
-    user.send(`You are muted in **${message.guild.name}** For \`${reason}\``)
+  
     
     
 

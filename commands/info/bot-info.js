@@ -6,7 +6,7 @@ const Discord = require('discord.js')
 module.exports = {
     name: "botinfo",
     description: "get info about the  bot",
-    category: "bot",
+    category: "info",
     usage: "botinfo",
     run: async (client, message, args) => {
       let user = client.user

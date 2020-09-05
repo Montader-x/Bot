@@ -12,7 +12,6 @@
   "dependencies": {
     "@types/request-promise-native": "^1.0.17",
     "ascii-table": "0.0.9",
-    "axios": "^0.19.2",
     "canvacord": "^4.0.1",
     "common-tags": "^1.8.0",
     "cpu-stat": "^2.0.1",

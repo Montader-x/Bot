@@ -4,10 +4,8 @@ const fetch = require("node-fetch");
 module.exports = {
   name: "npm",
   description: "Search packages on npm by their name",
-  category: "owner",
+  category: "utility",
   run: async (client, message, args) => {
-      if (message.author.id !== '556218750337286145')
-      return message.reply("Only the owner is allowed to run this command");
     const query = args.join(" ");
     const data = await fetch(
       `http://registry.npmjs.com/-/v1/search?text=${query}&size=10`

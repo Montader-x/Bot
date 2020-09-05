@@ -1,3 +1,4 @@
+const db = require('quick.db')
 module.exports = {
     name: "unmute",
     category: "moderation",
@@ -20,19 +21,19 @@ module.exports = {
         );
       }
       
-      let muterole = message.guild.roles.cache.find(x => x.name === "Muted")
+      let muterole = db.get(`muteRole_${message.guild.id}`)
       
       
    if(user.roles.cache.has(muterole)) {
-        return message.channel.send("Given User do not have mute role so what i am suppose to take")
+        return message.channel.send("User is not muted!")
       }
       
       
-      user.roles.remove(muterole)
+      user.roles.remove(muterole.id)
       
       await message.channel.send(`**${message.mentions.users.first().username}** is unmuted`)
       
-      user.send(`You are now unmuted from **${message.guild.name}**`)
+   
   
     }
   };

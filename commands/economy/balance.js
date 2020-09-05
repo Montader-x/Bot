@@ -17,7 +17,8 @@ module.exports = {
     const embed = new MessageEmbed()
     .setTitle(`${username}'s Balance`)
     .setColor("BLUE")
-    .addField("Pocket:", bal);
+    .addField("Pocket:", bal)
+    .addField("bank:", bank);
     
 
     message.channel.send(embed);

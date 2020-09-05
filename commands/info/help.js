@@ -54,7 +54,7 @@ const prefix = db.get(`prefix_${message.guild.id}`)
 
         let desc = "`" + value.join("`, `") + "`";
 
-        emx.addField(`${category.toUpperCase()}[${value.length}]`, desc);
+        emx.addField(`${category.toLowerCase()}[${value.length}]`, desc);
       }
 
       return message.channel.send(emx);

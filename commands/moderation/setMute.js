@@ -2,10 +2,10 @@ const Discord = require("discord.js")
 const db = require("quick.db")
 
 module.exports = {
-  name: "setautorole",
+  name: "setmute",
   category: "config",
-  usage: "setautor <@role>",
-  description: "Set the role people get uppon joining",
+  usage: "setMute <@role>",
+  description: "Set the mute role",
   run: (client, message, args) => {
     
 		if(!message.member.hasPermission("ADMINISTRATOR"))
@@ -18,8 +18,8 @@ module.exports = {
     
     //Now we gonna use quick.db
     
-      db.set(`welcomerole_${message.guild.id}`, role); //set id in var
+      db.set(`muteRole_${message.guild.id}`, role); //set id in var
     
-    message.channel.send(`auto Role is seted as ${role}`) //send success message
+    message.channel.send(`mute  Role is seted as ${role}`) //send success message
   }
 }

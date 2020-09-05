@@ -3,7 +3,7 @@ const { Message, Client, MessageEmbed } = require("discord.js");
 module.exports = {
   name: "rradd",
   description: "Add a reaction role",
-  category: "reactionroles",
+  category: "utility",
   usage: "?rradd <channel id> <role id> <emoji>",
   /**
    * @param {Client} bot

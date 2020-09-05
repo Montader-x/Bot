@@ -128,9 +128,10 @@ if(message.mentions.has(client.user) && !message.mentions.everyone){
         command.run(client, message, args);
 
 });
-const TicketModel = require('./models/Ticket');
+
 const { MessageReaction, User } = require("discord.js");
 const ReactionModel = require("./models/ReactionRole");
+
 client.on('guildMemberAdd', async member => {
     let welcomeChannel = db.get(`welchannel_${member.guild.id}`);
   
@@ -165,7 +166,7 @@ client.on('guildMemberRemove', async member => {
 })
 client.on('messageDelete', message => {
     
-		
+		if(message.author === null) return;
 
    let logChannel = db.get(`logchannel_${message.guild.id}`);
    
@@ -334,35 +335,10 @@ client.on('messageReactionAdd ', async (reaction, user) => {
           member.roles.add(data.Role);
   
         } else {
-      TicketModel.findOne(
-      {
-        Guild: reaction.messsage.guild.id,
-        MessageID: reaction.message.id,
-        Reaction:  "✉️",
-      },
-    
-    
-    
-     
-     
-              reaction.users.remove(user))
-
-   const channel = await reaction.message.guild.channels.create(`ticket-${user.username}`, {
-  type: 'text',
-  permissionOverwrites: [
-     {
-       id: user.id,
-       allow: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
-
-       id: reaction.message.guild.roles.everyone,
-       deny: ['VIEW_CHANNEL'],
       
-    },
-  ],
-   
-  }).then(async channel => {
-    channel.send('staff will be here soon')
-  })
+          if(error) {
+          (console.log(error))
+          }
   }
 }
 })
@@ -408,6 +384,15 @@ client.on("guildMemberRoleRemove", (member, role) => {
   .setTitle(`Role removed from ${member.displayName}!`)
   .addField(`removed role:`, `${role}` )
   client.channels.cache.get(logChannel).send(roleRedbed)
+});
+client.on("guildMemberNicknameUpdate", (member, oldNickname, newNickname) => {
+  let logChannel = db.get(`logchannel_${member.guild.id}`);
+  if(!logChannel) return;
+  let nickUpbed = new MessageEmbed()
+  .setTitle(`nickname updated for ${member.displayName}!`)
+  .addField(`old nickname:`, `${oldNickname}` )
+  .addField(`new nickname:`, `${newNickname}`)
+  client.channels.cache.get(logChannel).send(nickUpbed)
 });
 
 /*client.on("guildChannelPermissionsUpdate", (channel, oldPermissions, newPermissions) => {

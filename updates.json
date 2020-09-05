@@ -1,3 +1,5 @@
 {
- "1": {"name": "animals", "description": "This update will add some animal commands"}
+ "1": {"name": "fixed", "description": "Fixed the meme command"},
+ "2": {"name": "added", "description": "Added channelinfo, roles, npm, emojis"},
+ "3": {"name": "removed", "description": "Removed ticketsetup, close because broken"}
 }
