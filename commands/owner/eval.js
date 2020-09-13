@@ -1,11 +1,12 @@
 const util = require("util");
 const { MessageEmbed } = require('discord.js')
+const { owners } = require("../../config.json");
 module.exports = {
     name: "eval",
     description: "Eval",
     category: "owner",
     run: async (client, message, args) => {
-      if (message.author.id !== '556218750337286145')
+      if (message.author.id !== owners[0] && message.author.id !== owners[1])
         return message.reply("Only the owner is allowed to run this command");
   
       const toEval = args.join(" ");

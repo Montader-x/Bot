@@ -23,7 +23,8 @@ module.exports = {
                 `**Channels:** ${client.channels.cache.size}`,
                 `**NodeJS:** ${process.version}`,
                 `**Client Uptime:** ${ms(client.uptime, {long: true})}`,
-                '\u200b'
+                '\u200b',
+                `**source code:** [click here](https://www.youtube.com/watch?v=dQw4w9WgXcQ)`
 
             ], true)
             .addField('**System**', [
