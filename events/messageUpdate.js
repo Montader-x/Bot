@@ -7,7 +7,7 @@ module.exports = {
     if (!newMsg.guild) return;
     
 
-    const webhookClient = new Discord.WebhookClient(db.get(`webhook_${oldMsg.guild.id}`));
+    
 
     // not enabled
     if (webhookClient === null || !webhookClient) return;

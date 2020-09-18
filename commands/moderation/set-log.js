@@ -16,9 +16,9 @@ module.exports = {
     }
     
     //Now we gonna use quick.db
-
     
     
-    message.channel.send(`log Channel is set as ${channel}`) //send success message
+    
+    message.channel.send(`as you havent know we have gotten rate limited please wait until we fix the logging system thank you!`) //send success message
   }
 }
