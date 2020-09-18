@@ -4,7 +4,7 @@ module.exports = {
   name: "pause",
   description: "Pause the currently playing music",
   category: "music",
-  run: (message) => {
+  run: (client, message, args) => {
     const queue = message.client.queue.get(message.guild.id);
     if (!queue) return message.reply("There is nothing playing.").catch(console.error);
     if (!canModifyQueue(message.member)) return;
