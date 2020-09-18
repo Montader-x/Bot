@@ -1,26 +1,24 @@
-const { MessageEmbed } = require('discord.js')
-const db = require('quick.db')
+const { MessageEmbed } = require("discord.js");
+const { getUserMoney, getUserBank } = require("../../utils/economy");
 
 module.exports = {
     name: "balance",
-    description: "check how much money you have",
+    description: "balance",
     category: "economy",
-    aliases: ["bal", "money"],
-    usage: "balance",
-     run:  async (bot, message, args, color) => {
-      let bal = db.get(`money_${message.author.id}`)
-      let user = message.mentions.members.first() || message.member
-     if (bal === null) bal = 0;
-     let bank = db.get(`bank_${message.author.id}`)
-     if (bank === null) bank = 0;
-     const username = user.user.tag
-    const embed = new MessageEmbed()
-    .setTitle(`${username}'s Balance`)
-    .setColor("BLUE")
-    .addField("Pocket:", bal)
-    .addField("bank:", bank);
-    
+    run: async (client, message) => {
+        const user = message.mentions.users.first() || message.author;
+        let money = await getUserMoney(message.guild.id, user.id);
+        let bank = await getUserBank(message.guild.id, user.id);
+        
+        if (money === null) money = 0;
+        if (bank === null) bank = 0;
 
-    message.channel.send(embed);
- }
-}
+        const embed = new MessageEmbed()
+            .setTitle(`${user.username}'s Balance`)
+            .setColor("BLUE")
+            .addField("Pocket:", money)
+            .addField("Bank", bank);
+
+        message.channel.send(embed);
+    }
+};

@@ -1,44 +1,49 @@
-const db = require('quick.db')
-const Discord = require('discord.js')
-const random = require("random");
+const { getUserMoney, removeUserMoney } = require("../../utils/economy");
 
 module.exports = {
   name: "rob",
-  description: "steal money from someone",
+  description: "Rob up to 1000coins from somebody",
   category: "economy",
-  usage: "rob <mention>",
-  aliases: ["steal"],
-  run: async (client, message, args, config) => {
+  run: async (client, message, args) => {
+    const user = message.mentions.users.first();
+    const amount = args.slice(1)[0];
 
-
-    let user = message.mentions.members.first()
-       if (!user) {
-        return message.channel.send('Sorry, you forgot to mention somebody.')}
-    let targetuser = await db.fetch(`money_${user.id}`) 
-    let author = await db.fetch(`money_${message.author.id}`)
-
-
-
-    if (author < 250) { // if the authors balance is less than 250, return this.
-        return message.channel.send(':x: You need atleast 250$ to rob somebody.')
+    if (!user) {
+      return message.channel.send("Please provide a user mention");
     }
 
-    if (targetuser < 1) { // if mentioned user has 0 or less, it will return this.
-        return message.channel.send(`:x: ${user.user.username} does not have anything to rob.`)
+    if (user.id === message.author.id) {
+      return message.channel.send("You can't rob yourself!");
     }
 
-      
-    let rob = random.int(0, targetuser); 
-    /*It grabs the amount of money the target has and places it as the limit*/
+    if (!amount) {
+      return message.channel.send("Please provide an amount to rob!");
+    }
 
-    let embed = new Discord.MessageEmbed()
-    .setDescription(`${message.author} you robbed ${user} and got away with ${rob}!`)
-    .setColor("GREEN")
-    .setTimestamp()
-    message.channel.send(embed)
+    if (amount < 0 || isNaN(amount)) {
+      return message.channel.send("Amount must be above 0 or a valid number!");
+    }
 
+    if (amount > 1000) {
+      return message.channel.send("Amount must be under 1000 and above 0");
+    }
 
-    db.subtract(`money_${user.id}`, rob)
-    db.add(`money_${message.author.id}`, rob)
-  }
-}
+    const userId = user.id;
+    const guildId = message.guild.id;
+    let usersMoney = getUserMoney(guildId, userId);
+
+    if (usersMoney === null) usersMoney = 0;
+
+    if (usersMoney < 0) {
+      return message.channel.send(
+        "User doesn't have any money, therefor you can't rob this user."
+      );
+    }
+
+    removeUserMoney(guildId, userId, amount);
+
+    return message.channel.send(
+      `Successfully robbed **${amount}coins** from **${user.tag}**`
+    );
+  },
+};
