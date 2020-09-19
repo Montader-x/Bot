@@ -5,6 +5,7 @@ const {
   setStoreItems,
   removeStoreItem,
 } = require("../../utils/economy");
+const db = require('quick.db')
 
 module.exports = {
   name: "store",

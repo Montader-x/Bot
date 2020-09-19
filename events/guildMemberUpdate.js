@@ -1,15 +1,15 @@
-const { getAuditChannel } = require("../utils/functions");
+
 const { MessageEmbed } = require("discord.js");
 
 module.exports = {
   name: "guildMemberUpdate",
   async execute(client, newMember, oldMember) {
+    const w = await newMember.guild.fetchWebhooks()
+    const webhook = w.find(w => w.name === "Andoi");
     if (!oldMember.guild) return;
-    const auditChannel = await getAuditChannel(newMember.guild.id);
     const avatar = newMember.user.displayAvatarURL({ dynamic: true });
 
     // not enabled
-    if (auditChannel === null || !auditChannel) return;
 
     const embed = new MessageEmbed()
       .setAuthor(`${newMember.user.tag}`, avatar)
@@ -24,10 +24,10 @@ module.exports = {
       embed
         .setTitle("Member Update: `Nickname`")
         .setDescription(`${newMember}'s **nickname** was changed.`)
-        .addField("Nickname", `${oldNickname} ➔ ${newNickname}`);
+        .addField("Nickname", `${newNickname} ➔ ${oldNickname}`);
 
       // send message
-      client.channels.cache.get(auditChannel.id).send({ embed });
+      webhook.send(embed)
     }
 
     // Role add
@@ -41,7 +41,7 @@ module.exports = {
         .setDescription(`${newMember} was **given** the ${role} role.`);
 
       // send message
-      client.channels.cache.get(auditChannel.id).send({ embed });
+      webhook.send(embed)
     }
 
     // Role remove
@@ -55,7 +55,7 @@ module.exports = {
         .setDescription(`${newMember} was **removed** from ${role} role.`);
 
       // send message
-      client.channels.cache.get(auditChannel.id).send({ embed });
+      webhook.send(embed)
     }
   },
 };

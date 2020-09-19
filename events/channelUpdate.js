@@ -4,18 +4,8 @@ const { getAuditChannel } = require("../utils/functions");
 module.exports = {
   name: "channelUpdate",
   async execute(client, oldChannel, newChannel) {
-    const auditChannel = await getAuditChannel(oldChannel.guild.id);
-
-    
-    if (auditChannel === null || !auditChannel) return;
-
-    
-    if (
-      !oldChannel.guild.channels.cache.some(
-        (ch) => ch.name === auditChannel.name
-      )
-    )
-      return;
+    const w = await oldChannel.guild.fetchWebhooks()
+    const webhook = w.find(w => w.name === "Andoi");
 
     let msg = "";
     const type = oldChannel.type;
@@ -42,6 +32,6 @@ module.exports = {
       .setColor("ORANGE")
       .setTimestamp();
 
-    client.channels.cache.get(auditChannel.id).send({ embed });
+    webhook.send(embed)
   },
 };

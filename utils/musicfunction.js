@@ -4,7 +4,7 @@ module.exports = {
       const botChannel = member.guild.me.voice.channel;
   
       if (channel !== botChannel) {
-        member.send("You need to join the voice channel first!").catch(console.error);
+        message.channel.send(`Hey ${member} join the voice channel first stupid`).catch(console.error);
         return false;
       }
   

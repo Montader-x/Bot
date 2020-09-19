@@ -14,11 +14,15 @@ module.exports = {
     if(!channel) { //if channel is not mentioned
       return message.channel.send("Please Mention the channel first")
     }
-    
     //Now we gonna use quick.db
     
+    channel.createWebhook('Andoi', {
+      avatar: 'https://cdn.discordapp.com/attachments/740682998587850792/756802391600529418/andi.png',
+      channel: channel
+    })
+
     
     
-    message.channel.send(`as you havent know we have gotten rate limited please wait until we fix the logging system thank you!`) //send success message
+    message.channel.send(`Done! setted log channel to ${channel}`) //send success message
   }
 }
