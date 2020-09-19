@@ -1,5 +1,5 @@
 {
- "1": {"name": "fixed", "description": "Fixed the meme command"},
- "2": {"name": "added", "description": "Added channelinfo, roles, npm, emojis"},
- "3": {"name": "removed", "description": "Removed ticketsetup, close because broken"}
+ "1": {"name": "fixed", "description": "logging + it creates a webhook so we dont get rate limited"},
+ "2": {"name": "added", "description": "music category"},
+ "3": {"name": "removed", "description": "nothing"}
 }
