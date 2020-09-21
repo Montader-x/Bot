@@ -1,0 +1,18 @@
+{
+"Module exports": {
+	"prefix": "me",
+	"body": [
+	  "module.exports = {",
+	  " name: \"\",",
+	  " category: \"\",",
+	  "description: \"\",",
+	  "aliases: [\"a alias\"],",
+	  "usage: \"\",",
+	  "run: (client, message, args) => {",
+	  "",
+	  "}",
+	  "}"
+	],
+	"description": "Module exports"
+  }
+}

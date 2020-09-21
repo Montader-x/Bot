@@ -5,6 +5,9 @@ const YouTubeAPI = require("simple-youtube-api");
 const youtube = new YouTubeAPI(youtubeApiKey);
 const scdl = require("soundcloud-downloader");
 
+//! credit: Evobot
+//! Coltz was here too :)
+
 module.exports = {
   name: "play",
   aliases: ["p"],

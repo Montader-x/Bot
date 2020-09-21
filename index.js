@@ -8,7 +8,7 @@ const enmap = require('enmap');
 const { Client, MessageEmbed, Guild } = require('discord.js');
 const { GiveawaysManager } = require('discord-giveaways')
 const client = new Discord.Client({
-  disableMentions: "everyone",
+  disableMentions: "all",
   partials: ["MESSAGE", "REACTION", "USER", "GUILD_MEMBER"],
   ws: { properties: { $browser: "Discord Android" }}
 });
@@ -28,6 +28,8 @@ client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
 client.queue = new Map()
 client.prefix = prefix; 
+client.snipes = new Map()
+client.intl = Intl.DateTimeFormat("en", { dateStyle: "full", timeStyle: "full", timeZone: "America/New_York", hour12: true, timeZoneName: "short" })
 
 
 
