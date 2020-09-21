@@ -7,6 +7,8 @@
    description: "does something",
    category: "tickets",
    run: (client, message, args) => {
+    if(!message.member.hasPermission("ADMINISTRATOR"))
+     return message.channel.send("You need admin for this")
       let channel = message.mentions.channels.first();
       if(!channel) return message.channel.send("mention a channel first");
   
