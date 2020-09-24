@@ -1,238 +1,184 @@
-const Discord = require('discord.js')
-const client = new Discord.Client()
+const { oneLine } = require("common-tags");
+const Discord = require("discord.js");
+const moment = require("moment");
+
+
+const serverflags = {
+  DISCORD_EMPLOYEE: ` <:757681878064169051:757978989691404389> \`Discord Employee\``,
+  DISCORD_PARTNER: `<:753221825525317704:757982754687156287> \`Discord Partner\``,
+  BUGHUNTER_LEVEL_1: `<:757680380018032733:757978990144258228> \`Bug Hunter (Level 1)\``,
+  BUGHUNTER_LEVEL_2: `<:757680312712036395:757978989938868306> \`Bug Hunter (Level 2)\``,
+  HYPESQUAD_EVENTS: `<:757679125673803936:757978989619838976> \`HypeSquad Events\``,
+  HOUSE_BRAVERY: `<:753663697963974806:757978990064566395> \`House of Bravery\``,
+  HOUSE_BRILLIANCE: `<:753709461910061140:757978990110834799> \`House of Brilliance\``,
+  HOUSE_BALANCE: `<:753662723300130817:757978989745668108> \`House of Balance\``,
+  EARLY_SUPPORTER: `<:757682137469288590:757978989976617112> \`Early Supporter\``,
+  TEAM_USER: `\`Team User\``,
+  SYSTEM: `\`System\``,
+  VERIFIED_BOT: `<:753702142136549476:757978989846331512> \`Verified Bot\``,
+  VERIFIED_DEVELOPER: `<:753702339793256588:757978990064435335> \`Verified Bot Developer\``,
+};
+    const st = {
+      "online": "<:755519938118156400:757978989577896018> Online",
+      "idle": "<:755520201055010846:757978989817233459> IDLE",
+      "offline": "<:755520068451827824:757978989946994769> Offline",
+      "dnd": "<:755519807490621552:757978989380763729> Do Not Disturb",
+    }
+
 
 module.exports = {
-    name: "userinfo",
-    description: "get info about an user",
-    category: "info",
-    aliases: ["whois"],
-    usage: "userinfo <user>",
-    run: async (client, message, args) => {
-      const status = {
-        online: "Online",
-        idle: "Idle",
-        dnd: "Do Not Disturb",
-        offline: "Offline/Invisible"
-      };
-      const desktop = {
-        online: "Desktop => Online",
-        idle: "Desktop => Idle",
-        dnd: "Desktop => Do Not Disturb"
-      };
-      const web = {
-        online: "Web => Online",
-        idle: "Web => Idle",
-        dnd: "Web => Do Not Disturb"
-      };
-      const mobile = {
-        online: "Mobile => Online",
-        idle: "Mobile => Idle",
-        dnd: "Mobile => Do Not Disturb"
-      };
-      const ptype = {
-        PLAYING: "Playing ",
-        LISTENING: "Listening ",
-        WATCHING: "Watching ",
-        STREAMING: "Streaming ",
-        CUSTOM_STATUS: "Custom status:"
-      };
-  
-      let user =
-        message.mentions.users.first() ||
-        client.users.cache.get(args[1]) ||
-        client.users.cache.find(m => m.tag === args.slice(1).join(" ")) ||
-        client.users.cache.find(m => m.username === args.slice(1).join(" "));
-      if (!args[1]) user = message.author;
-      if (!user) {
-        if (
-          message.guild &&
-          message.guild.members.cache.find(
-            m => m.nickname === args.slice(1).join(" ")
-          )
-        ) {
-          user = message.guild.members.cache.find(
-            m => m.nickname === args.slice(1).join(" ")
-          ).user;
-        } else {
-          try {
-            const fetch = await client.users.fetch(args[1]);
-            user = fetch;
-            if (!user) return message.channel.send("Invalid member!");
-          } catch (err) {
-            return message.channel.send("Invalid member!");
+  name: "info",
+  description: "Shows the info about an user account",
+  category: "info",
+  usage: "info",
+  aliases: ["whois", "userinfo", "ui"],
+  run: async (client, message, args) => {
+    const member =
+      message.mentions.members.first() ||
+      message.guild.members.cache.find((u) => u.id === args[0]) ||
+      message.member;
+
+    const nickname = member.nickname || "*None*";
+    const discriminator = member.user.discriminator || "*None*";
+
+    const createdAt = moment.utc(member.user.createdAt).calendar()
+    const lp = moment.utc(member.user.createdAt).fromNow()
+    const joinedAt = moment.utc(member.joinedAt).calendar()
+    const lap = moment.utc(member.joinedAt).fromNow()
+
+    let userFlags = (await member.user.fetchFlags())
+      .toArray()
+      .map((flag) => serverflags[flag]);
+    if (!userFlags || !userFlags.length) userFlags = "*None*";
+
+    console.log(userFlags);
+
+    const avatar =
+      member.user.displayAvatarURL({
+        format: "png",
+        dynamic: true,
+        size: 4096,
+      }) || "*None*";
+
+    const bot = member.user.bot ? "Yes" : "No";
+
+    const activities =
+      member.user.presence.activities.length === 0 ?
+      {
+        status: "*None*",
+        other: [],
+      } :
+      member.user.presence.activities.reduce(
+        (activities, activity) => {
+          switch (activity.type) {
+            case "CUSTOM_STATUS":
+              activities.status = `${
+                    activity.emoji ? `${activity.emoji} | ` : ""
+                  }${activity.state}`;
+              break;
+            case "PLAYING":
+              activities.other.push(`${activity.type} ${activity.name}`);
+              break;
+            case "LISTENING":
+              if (activity.name === "Spotify" && activity.assets) {
+                activities.other.push(
+                  `${activity.details} by ${activity.state}`
+                );
+              }
+              break;
+            default:
+              activities.other.push(activity.type);
           }
+
+          return activities;
+        }, {
+          status: "*None*",
+          other: [],
         }
-      }
-      const premiumtext = ["Without Nitro", "Nitro Classic", "***Nitro***"];
-      const thing = !user.client ? (user.cache.premium_type ? user.premium_type : await user.getPremiumType()) : undefined;
-      let finaltext = ""
-      if (!user.client) {
-        if (thing.value < 0) {
-          finaltext = "[*I don't know*](https://discord.com/api/oauth2/authorize?client_id=728694375739162685&permissions=0&scope=bot)";
-        } else if (thing.type === "db") {
-          finaltext = premiumtext[thing.value] + " (DB)";
-        } else {
-          finaltext = premiumtext[thing.value];
+      );
+
+    const roles = member.roles.cache.array().length ?
+      member.roles.cache
+      .array()
+      .filter((role) => role.name !== "@everyone")
+      .join(", ") :
+      "*None*";
+    const highestRole = member.roles.highest || "*None*";
+    const hoistRole = member.roles.hoist || "*None*";
+    let status = st[member.presence.status];
+
+    const embed = new Discord.MessageEmbed()
+      .setTitle(member.user.tag)
+      .setURL(avatar)
+      .setThumbnail(avatar)
+      .setColor("RANDOM")
+      .setFooter(`ID: ${member.user.id}`)
+      .setTimestamp()
+      .addFields(
+        {
+          name: "Nickname",
+          value: nickname,
+          inline: true,
+        },
+        {
+          name: "#️Discriminator",
+          value: discriminator,
+          inline: true,
+        },
+        {
+          name: "Build",
+          value: `${createdAt} | ${lp}`,
+          inline: false,
+        },
+        {
+          name: "Joined",
+          value: `${joinedAt} | ${lap}`,
+          inline: true,
+        },
+        {
+          name: "Badges",
+          value: userFlags,
+          inline: false,
+        },
+        {
+          name: "Bot",
+          value: bot,
+          inline: true,
+        },
+        {
+          name: "Custom Status",
+          value: activities.status,
+          inline: true,
+        },
+        {
+          name: " Status",
+          value: `${status}`,
+          inline: true,
+        },
+        {
+          name: "🥇Highest Role",
+          value: highestRole || 'None',
+          inline: true,
+        },
+        {
+          name: "Hoist Role",
+          value: hoistRole || 'None',
+          inline: true,
+        },
+        {
+          name: " Activities",
+          value: activities.other && activities.other.length ?
+            activities.other.join("\n") :
+            "*None*",
+          inline: true,
+        },
+        {
+          name: ` Roles (${member.roles.cache.size - 1})`,
+          value: roles || 'None',
+          inline: true,
         }
-      }
-      var status2 = "";
-      if (user.presence.clientStatus) {
-        if (user.presence.clientStatus["web"]) {
-          status2 += web[user.presence.clientStatus["web"]] + "\n";
-        }
-        if (user.presence.clientStatus["mobile"]) {
-          status2 += mobile[user.presence.clientStatus["mobile"]] + "\n";
-        }
-        if (user.presence.clientStatus["desktop"]) {
-          status2 += desktop[user.presence.clientStatus["desktop"]] + "\n";
-        }
-      } else {
-        status2 = status[user.presence.status];
-      }
-      if (!status2) status2 = "Offline/Invisible";
-      var ptext = "";
-      if (user.presence.activities && user.presence.activities[0]) {
-        for (const npresence of Object.values(user.presence.activities)) {
-          if (npresence.type == "CUSTOM_STATUS") {
-            ptext += ptype[npresence.type] + "\n";
-            if (npresence.emoji) ptext += npresence.emoji.toString() + " ";
-            if (npresence.state) ptext += npresence.state;
-            ptext += "\n";
-          } else {
-            ptext += ptype[npresence.type] + npresence.name;
-            if (npresence.details) {
-              ptext += "\nDetails: " + npresence.details;
-            }
-            if (npresence.state) {
-              ptext += "\n" + npresence.state;
-            }
-            if (npresence.party) {
-              if (npresence.party.size)
-                ptext +=
-                  "\nParty: " +
-                  npresence.party.size[0] +
-                  "/" +
-                  npresence.party.size[1];
-            }
-            if (npresence.assets) {
-              if (npresence.assets.largeText)
-                ptext += "\n" + npresence.assets.largeText;
-              if (npresence.assets.smallText)
-                ptext += "\n" + npresence.assets.smallText;
-            }
-            ptext += "\n";
-          }
-        }
-      } else ptext = "None";
-  
-      let flagtext = "Without flags";
-  
-      if (user.flags) {
-        if (user.flags.toArray()) {
-          if (user.flags.toArray().join("\n")) {
-            flagtext = user.flags.toArray().join("\n");
-          }
-        }
-      }
-  
-      const embed = new Discord.MessageEmbed()
-        .setAuthor(user.username, user.displayAvatarURL({ dynamic: true }))
-        .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-        .setTitle(`Information about ${user.username}`)
-        .setColor("#00ff00")
-        .setTimestamp();
-  
-      if (message.guild) {
-        try {
-          const member = await message.guild.members.fetch(user);
-  
-          const perms = member.permissions.toArray();
-          let permstext = "";
-          if (perms.indexOf("ADMINISTRATOR") === -1) {
-            permstext = perms.join(", ") || "Without permissions.";
-          } else {
-            permstext = "ADMINISTRATOR (All permissions)";
-          }
-          const perms2 = member.permissionsIn(message.channel).toArray();
-          let permstext2 = "";
-          if (perms2.indexOf("ADMINISTRATOR") === -1) {
-            permstext2 = perms2.join(", ") || "Without permissions.";
-          } else {
-            permstext2 = "ADMINISTRATOR (All permissions)";
-          }
-  
-          embed
-            .addField("Full Username", user.tag + "\n" + user.toString(), true)
-            .addField("ID", user.id, true)
-            .addField(
-              "Nickname",
-              member.nickname ? `${member.nickname}` : "None",
-              true
-            )
-            .addField("Bot?", user.bot ? "Yes" : "No", true);
-          if (!user.bot) {
-            embed.addField("Nitro type", finaltext, true);
-          }
-          embed.addField("Status", status2, true)
-            .addField("Presence", ptext, true)
-            .addField("Permissions (General)", `\`${permstext}\``, true)
-            .addField("Permissions (Overwrites)", `\`${permstext2}\``, true)
-            .addField("Flags", `\`${flagtext}\``, true)
-            .addField("Last Message", user.lastMessage ? user.lastMessage.url : "Without fetch about that")
-          if (!user.bot) {
-            embed.addField("Boosting?", member.premiumSince ? `Yes, since ${bot.intl.format(member.premiumSince)}` : "No")
-          }
-          embed.addField(
-            `Joined ${message.guild.name} at`,
-            client.intl.format(member.joinedAt)
-          )
-            .addField("Joined Discord At", client.intl.format(user.createdAt))
-            .addField(
-              "Roles",
-              `${member.roles.cache
-                .filter(r => r.id !== message.guild.id)
-                .map(roles => `${roles}`)
-                .join(" **|** ") || "No Roles"}`
-            );
-          message.channel.send(embed);
-        } catch (err) {
-          embed
-            .addField("Full Username", user.tag, true)
-            .addField("ID", user.id, true)
-            .addField("Bot?", user.bot ? "Yes" : "No", true)
-          if (!user.bot) {
-            embed.addField("Nitro type", finaltext, true)
-          }
-          embed.addField("Status", status2, true)
-            .addField("Presence", Discord.Util.splitMessage(ptext, { maxLength: 1000 })[0], true)
-            .addField("Flags", `\`${flagtext}\``, true)
-            .addField(
-              "Last Message",
-              user.lastMessage ? user.lastMessage.url : "Without fetch about that"
-            )
-            .addField(
-              "Joined Discord At",
-              client.intl.format(user.createdAt)
-            );
-          message.channel.send(embed);
-        }
-      } else {
-        embed
-          .addField("Full Username", user.tag, true)
-          .addField("ID", user.id, true)
-          .addField("Bot?", user.bot ? "Yes" : "No", true)
-        embed.addField("Status", status2, true)
-          .addField("Presence", ptext, true)
-          .addField("Flags", `\`${flagtext}\``, true)
-          .addField(
-            "Last Message",
-            user.lastMessage ? user.lastMessage.url : "Without fetch about that"
-          )
-          .addField(
-            "Joined Discord At",
-            client.intl.format(user.createdAt)
-          );
-        message.channel.send(embed);
-      }
-    }
-    }
+      );
+
+    message.channel.send(embed);
+  },
+};

@@ -7,9 +7,10 @@ module.exports = {
          `a!help || ${client.guilds.cache.size} servers.`,
          `a!help || ${client.channels.cache.size} channels`,
          `a!help || ${client.users.cache.size} users`,
+         `a!help || definitly not you xD`,
        ]
        const status = statuses[Math.floor(Math.random() * statuses.length)]
-       client.user.setActivity(status, { type: "WATCHING"})
+       client.user.setActivity(status, { type: "WATCHING" })
      }, 60000)
 
      const w = await client.guilds.cache.get("740295580886106233").fetchWebhooks()

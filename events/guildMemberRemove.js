@@ -18,7 +18,8 @@ module.exports = {
       .setDescription(`User: ${member} has left ${member.guild.name}`)
       .setColor("BLUE")
       .setTimestamp()
-      .setFooter(bot.user.username);
+      .setImage("https://media.giphy.com/media/26u4b45b8KlgAB7iM/giphy.gif")
+      .setFooter(client.user.username);
 
     client.channels.cache.get(leaveChannel).send({ embed });
   },

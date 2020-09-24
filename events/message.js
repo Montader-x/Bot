@@ -1,10 +1,10 @@
 const db = require('quick.db')
 const { MessageEmbed } = require('discord.js')
 const queue = new Map()
-
+const { ownerId } = require("../config.json")
 module.exports = {
     name: "message",
-    async execute(client, message) {
+    async execute(client, message, nolevel) {
       const prefix = db.get(`prefix_${message.guild.id}`);
       if(prefix === null) db.set(`prefix_${message.guild.id}`, "a!")
         if(!message.guild) return;
@@ -32,7 +32,6 @@ module.exports = {
         const cmd = args.shift().toLowerCase();
         
         if (cmd.length === 0) return;
-      
         // Get the command
         let command = client.commands.get(cmd);
         // If none is found, try to find it by alias
@@ -40,5 +39,6 @@ module.exports = {
           if(message.author.bot) return;
            if (command) 
               command.run(client, message, args);
+              
+              }
     }
-}

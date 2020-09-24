@@ -5,8 +5,10 @@
    name: "ticketsetup",
    usage: "ticketsetup <channel>",
    description: "does something",
-   category: "tickets",
+   category: "config",
    run: (client, message, args) => {
+      if(!message.member.hasPermission("ADMINISTRATOR"))
+      return message.channel.send("You need admin perms for this to work!")
       let channel = message.mentions.channels.first();
       if(!channel) return message.channel.send("mention a channel first");
   

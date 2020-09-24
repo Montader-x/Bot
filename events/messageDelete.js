@@ -20,7 +20,7 @@ module.exports = {
   )
   .setColor("RED")
   .setTimestamp();
-
+ if(message.author === null) return;
     if (message.author.id === client.user.id) return;
    webhook.send(embed)
 
