@@ -4,7 +4,7 @@ const Discord = require("discord.js");
 const fs = require('fs');
 const token = require(`./token.json`);
 const enmap = require('enmap');
-
+const Levels = require("discord-xp");
 const { Client, MessageEmbed, Guild, ShardingManager } = require('discord.js');
 const { GiveawaysManager } = require('discord-giveaways')
 const client = new Discord.Client({
@@ -17,7 +17,8 @@ const shardManager = new ShardingManager('./index.js', {
   // https://discord.js.org/#/docs/main/v11/class/ShardingManager
 
   // 'auto' handles shard count automatically
-  totalShards: 'auto', 
+  totalShards: "auto",
+  respawn: true,
 
 });
 
@@ -28,6 +29,7 @@ mongoose.connect(token.Mongo, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
 });
+
 const logs = require('discord-logs');
 logs(client);
 const prefix = getServerPrefix()
@@ -79,6 +81,9 @@ client.giveawaysManager = manager;
 
 
 require("./handlers/event")(client);
+
+
+
 
 
 

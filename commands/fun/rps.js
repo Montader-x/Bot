@@ -9,11 +9,13 @@ module.exports = {
    const replies = ["Rock", "Paper", "Scissors"];
 
    const reply = replies[Math.floor(Math.random() * replies.length)];
-
-        const embed = new MessageEmbed()
+  const userReply = args.join(" ")
+  if(userReply !== "rock" && userReply !== "paper" && userReply !== "scissors") return message.reply("Use for example: \"rock\", \"paper\", \"scissors\"")
+        let embed = new MessageEmbed()
             .setTitle("Rock Paper Scissors")
             .setColor("BLUE")
-            .setDescription(`**${reply}**`)
+            .addField(`My answer:`, reply)
+            .addField("Your answer:", userReply)
             .setFooter(message.author.username);
 
         message.channel.send(embed);

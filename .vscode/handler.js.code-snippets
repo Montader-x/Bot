@@ -3,8 +3,8 @@
 	"prefix": "me",
 	"body": [
 	  "module.exports = {",
-	  " name: \"\",",
-	  " category: \"\",",
+	  "name: \"\",",
+	  "category: \"\",",
 	  "description: \"\",",
 	  "aliases: [\"a alias\"],",
 	  "usage: \"\",",
