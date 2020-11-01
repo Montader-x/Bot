@@ -10,7 +10,7 @@ module.exports = {
         const logBed = new MessageEmbed()
         .setTitle(`i have been removed from ${guild}`)
         webhook.send(logBed)
-
-
+        console.log("removed from server")
+        await client.deleteConfig(guild).catch(err => console.log(err));
     }
 }

@@ -21,13 +21,8 @@ const shardManager = new ShardingManager('./index.js', {
 });
 
 const { getServerPrefix } = require("./utils/functions");
-
-const mongoose = require("mongoose");
-mongoose.connect(token.Mongo, {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-});
-
+const { init } = require('./utils/mongoose')
+init()
 const logs = require('discord-logs');
 logs(client);
 const prefix = getServerPrefix()
@@ -40,6 +35,7 @@ client.prefix = prefix;
 client.snipes = new Map()
 client.afk = new Map()
 client.imdb = new imdb.Client({ apiKey: imdbKey });
+client.config = require("./config.json");
 const GiveawayManagerWithShardSupport = class extends GiveawaysManager {
 
   // Refresh storage method is called when the database is updated on one of the shards
@@ -64,26 +60,10 @@ const manager = new GiveawayManagerWithShardSupport(client, {
 
 client.giveawaysManager = manager;
 
-
-
-
-
-
-
-
-
-
 ["command"].forEach(handler => { 
   require(`./handlers/${handler}`)(client);
 })
 
-
-
 require("./handlers/event")(client);
-
-
-
-
-
 
 client.login(token.Token);

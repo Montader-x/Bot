@@ -1,5 +1,4 @@
 const { MessageReaction, User, MessageAttachment } = require("discord.js");
-const ReactionModel = require("../models/ReactionRole");
 const Discord = require('discord.js')
 const db = require('quick.db')
 const fs = require('fs')

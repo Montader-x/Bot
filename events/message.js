@@ -6,7 +6,8 @@ const configModel = require('../models/config')
 module.exports = {
     name: "message",
     async execute(client, message) {
-      
+      if (message.channel.type === "dm") return;
+      //hey can u add me to the database
      const config = await configModel.findOne({ GuildID: message.guild.id})
      if(!config) {
        const aaa = new configModel({
@@ -25,7 +26,6 @@ module.exports = {
       const prefix = db.get(`prefix_${message.guild.id}`);
       if(prefix === null) db.set(`prefix_${message.guild.id}`, "a!")
         if(!message.guild) return;
-        if (message.channel.type === "dm") return;
       if(message.mentions.has(client.user) && !message.mentions.everyone){
         let mentionEmbed = new MessageEmbed()
         .setColor("BLACK")

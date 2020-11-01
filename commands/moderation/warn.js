@@ -1,6 +1,5 @@
 const { MessageEmbed } = require("discord.js")
-const db = require("quick.db")
-
+const warnModel = require('../../models/warn')
 module.exports = {
   name: "warn",
   category: "moderation",
@@ -36,18 +35,26 @@ module.exports = {
       return message.channel.send("Please provide reason to warn - warn @mention <reason>")
     }
     
-    let warnings = db.get(`warnings_${message.guild.id}_${user.id}`)
+    let warnings = await warnModel.findOne({ GuildID: message.guild.id, UserID: user.id })
     
     if(warnings === 3) {
       return message.channel.send(`${message.mentions.users.first().username} already reached his/her limit with 3 warnings`)
     }
     
     if(warnings === null) {
-      db.set(`warnings_${message.guild.id}_${user.id}`, 1)
+      let aaa = new warnModel({
+        GuildID: message.guild.id,
+        UserID: user.id,
+        reason: [`${reason}`],
+        moderator: [`${message.author.username}`]
+      })//kk
+      aaa.save()
       user.send(`You have been warned in **${message.guild.name}** for ${reason}`)
       await message.channel.send(`You warned **${message.mentions.users.first().username}** for ${reason}`)
     } else if(warnings !== null) {
-        db.add(`warnings_${message.guild.id}_${user.id}`, 1)
+        warnings.reason.push(reason)
+        warnings.moderator.push(message.author.username)
+        warnings.save()
        user.send(`You have been warned in **${message.guild.name}** for ${reason}`)
       await message.channel.send(`You warned **${message.mentions.users.first().username}** for ${reason}`)
     }

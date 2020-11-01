@@ -11,11 +11,11 @@ const option = args[0];
 if(!option) return message.channel.send("Please provide a option on or off")
  const config = await configModel.findOne({ GuildID: message.guild.id})
     if(option === "on") {
-       await config.update({ GuildID: message.guild.id, levelMessage: true})
+       await config.updateOne({ GuildID: message.guild.id, levelMessage: true})
         return message.channel.send("I have turned on level messages!")
     }
     if(option === "off") {
-        await config.update({ GuildID: message.guild.id, levelMessage: false})
+        await config.updateOne({ GuildID: message.guild.id, levelMessage: false})
         return message.channel.send("I have now turned off level messages!")
     }
   

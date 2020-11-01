@@ -1,50 +1,95 @@
 const db = require("quick.db");
 const moment = require("moment");
+const storeModel = require('../models/store')
+const userModel = require('../models/userEco')
 /**
  * @param {string} guildId
  * @param {string} userId
  * @returns {Promise}
  */
-const getUserMoney = (guildId, userId) =>
-  db.fetch(`money_${guildId}_${userId}`);
+const getUserMoney = async (guildId, userId) => {
+  const user = await userModel.findOne({ userID: userId })
+  if(!user) {
+    const aa = new userModel({ userID: userId})
+    aa.save()
+  }
+  
+  return user.money
+}
 /**
  * @param {string} guildId
  * @param {string} userId
  * @returns {Promise}
  */
-const getUserBank = (guildId, userId) => db.fetch(`bank_${guildId}_${userId}`);
+const getUserBank = async (guildId, userId) => {
+  const user = await userModel.findOne({ userID: userId })
+  if(!user) {
+    const aa = new userModel({ userID: userId})
+    aa.save()
+  }
+  
+  return user.bank
+}
 
 /**
  * @param {string} guildId
  * @param {string} userId
  * @param {number} amount
  */
-const addUserMoney = (guildId, userId, amount) =>
-  db.add(`money_${guildId}_${userId}`, amount);
+const addUserMoney = async (guildId, userId, amount) => {
+  const user = await userModel.findOne({ userID: userId })
+  if(!user) {
+    const aa = new userModel({ userID: userId})
+    aa.save()
+  }
+  const currentMon = user.money
+  return user.updateOne({ userID: userId, money: currentMon + amount})
+}
 
 /**
  * @param {string} guildId
  * @param {string} userId
  * @param {number} amount
  */
-const addUserBank = (guildId, userId, amount) =>
-  db.add(`bank_${guildId}_${userId}`, amount);
+const addUserBank = async (guildId, userId, amount) => {
+  const user = await userModel.findOne({ userID: userId })
+  if(!user) {
+    const aa = new userModel({ userID: userId})
+    aa.save()
+  }
+  const current = user.bank
+  return user.updateOne({ userID: userId, bank: current + amount})
+}
 
 /**
  * @param {String} guildId
  * @param {String} userId
  * @param {Number} amount
  */
-const removeUserBank = (guildId, userId, amount) =>
-  db.subtract(`bank_${guildId}_${userId}`, amount);
+const removeUserBank = async (guildId, userId, amount) => {
+  const user = await userModel.findOne({ userID: userId })
+  if(!user) {
+    const aa = new userModel({ userID: userId})
+    aa.save()
+  }
+  const current = user.bank
+  return user.updateOne({ userID: userId, bank: current - amount})
+}
 
 /**
  * @param {string} guildId
  * @param {string} userId
  * @param {number} amount
  */
-const removeUserMoney = (guildId, userId, amount) =>
-  db.subtract(`money_${guildId}_${userId}`, amount);
+const removeUserMoney = async (guildId, userId, amount) => {
+  const user = await userModel.findOne({ userID: userId })
+  if(!user) {
+    const aa = new userModel({ userID: userId})
+    aa.save()
+  }
+  const currentMon = user.money
+  return user.updateOne({ userID: userId, money: currentMon - amount})
+}
 
 /**
  * @param {string} guildId

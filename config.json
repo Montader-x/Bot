@@ -11,5 +11,13 @@
   "PRUNING": true,
   "SOUNDCLOUD_CLIENT_ID": "",
   "MAX_PLAYLIST_SIZE": 200,
-  "imdbKey": "f17e223"
+  "imdbKey": "f17e223",
+  "configDefaultSettings": {
+    "levelMessage": false,
+    "prefix": "a!"
+  },
+  "userDefaultStats": {
+    "bank": 0,
+    "money": 0
+  }
 }

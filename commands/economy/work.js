@@ -15,10 +15,10 @@ module.exports = {
 
         const work = await getUserWork(message.guild.id, user.id);
 
-        if (work !== null && timeout - (Date.now() - work) > 0) {
-            const timeUntillWork = moment(timeout - (Date.now() - work)).format("H [hrs], m [mins], s [secs]");
-            message.channel.send(`You have already worked recently, ${timeUntillWork} remaining`);
-        } else {
+        //if (work !== null && timeout - (Date.now() - work) > 0) {
+            //const timeUntillWork = moment(timeout - (Date.now() - work)).format("H [hrs], m [mins], s [secs]");
+           //message.channel.send(`You have already worked recently, ${timeUntillWork} remaining`);
+        //} else {
             const { name, amount } = jobs[Math.floor(Math.random() * jobs.length)];
 
             const embed = new MessageEmbed()
@@ -30,7 +30,7 @@ module.exports = {
 
             addUserMoney(message.guild.id, user.id, amount);
             setUserWork(message.guild.id, user.id, Date.now());
-        }
+        //}
 
     }
 };
