@@ -1,10 +1,8 @@
-const {  default_prefix } = require("./config.json");
-const { config } = require("dotenv");
+const {  imdbKey } = require("./config.json");
+const imdb = require("imdb-api");
 const Discord = require("discord.js");
 const fs = require('fs');
 const token = require(`./token.json`);
-const enmap = require('enmap');
-const Levels = require("discord-xp");
 const { Client, MessageEmbed, Guild, ShardingManager } = require('discord.js');
 const { GiveawaysManager } = require('discord-giveaways')
 const client = new Discord.Client({
@@ -40,7 +38,8 @@ client.aliases = new Discord.Collection();
 client.queue = new Map()
 client.prefix = prefix; 
 client.snipes = new Map()
-
+client.afk = new Map()
+client.imdb = new imdb.Client({ apiKey: imdbKey });
 const GiveawayManagerWithShardSupport = class extends GiveawaysManager {
 
   // Refresh storage method is called when the database is updated on one of the shards

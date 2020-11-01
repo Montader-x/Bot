@@ -13,6 +13,7 @@ module.exports = {
     if(!message) return;
     const w = await message.guild.fetchWebhooks()
     const webhook = w.find(w => w.name === "Andoi");
+    if(!webhook) return;
   const embed = new MessageEmbed()
   .setTitle("Message deleted")
   .setDescription(

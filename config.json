@@ -10,5 +10,6 @@
   "bugchannel": "744273920722599987",
   "PRUNING": true,
   "SOUNDCLOUD_CLIENT_ID": "",
-  "MAX_PLAYLIST_SIZE": 10
+  "MAX_PLAYLIST_SIZE": 200,
+  "imdbKey": "f17e223"
 }

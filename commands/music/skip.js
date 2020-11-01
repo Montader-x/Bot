@@ -9,7 +9,7 @@ module.exports = {
     const queue = message.client.queue.get(message.guild.id);
     if (!queue)
       return message.reply("There is nothing playing that I could skip for you.").catch(console.error);
-    if (!canModifyQueue(message.member)) return;
+    if (!canModifyQueue(message.member, message)) return;
 
     queue.playing = true;
     queue.connection.dispatcher.end();

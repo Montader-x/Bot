@@ -6,6 +6,7 @@ module.exports = {
   async execute(client, newMember, oldMember) {
     const w = await newMember.guild.fetchWebhooks()
     const webhook = w.find(w => w.name === "Andoi");
+    if(!webhook) return;
     if (!oldMember.guild) return;
     const avatar = newMember.user.displayAvatarURL({ dynamic: true });
 

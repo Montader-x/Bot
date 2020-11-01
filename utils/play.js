@@ -97,7 +97,7 @@ module.exports = {
         case "⏭":
           queue.playing = true;
           reaction.users.remove(user).catch(console.error);
-          if (!canModifyQueue(member)) return;
+          if (!canModifyQueue(member, message)) return;
           queue.connection.dispatcher.end();
           queue.textChannel.send(`${user} ⏩ skipped the song`).catch(console.error);
           collector.stop();
@@ -105,7 +105,7 @@ module.exports = {
 
         case "⏯":
           reaction.users.remove(user).catch(console.error);
-          if (!canModifyQueue(member)) return;
+          if (!canModifyQueue(member, message)) return;
           if (queue.playing) {
             queue.playing = !queue.playing;
             queue.connection.dispatcher.pause(true);
@@ -119,7 +119,7 @@ module.exports = {
 
         case "🔇":
           reaction.users.remove(user).catch(console.error);
-          if (!canModifyQueue(member)) return;
+          if (!canModifyQueue(member, message)) return;
           if (queue.volume <= 0) {
             queue.volume = 100;
             queue.connection.dispatcher.setVolumeLogarithmic(100 / 100);
@@ -133,7 +133,7 @@ module.exports = {
 
         case "🔉":
           reaction.users.remove(user).catch(console.error);
-          if (!canModifyQueue(member)) return;
+          if (!canModifyQueue(member, message)) return;
           if (queue.volume - 10 <= 0) queue.volume = 0;
           else queue.volume = queue.volume - 10;
           queue.connection.dispatcher.setVolumeLogarithmic(queue.volume / 100);
@@ -144,7 +144,7 @@ module.exports = {
 
         case "🔊":
           reaction.users.remove(user).catch(console.error);
-          if (!canModifyQueue(member)) return;
+          if (!canModifyQueue(membe, message)) return;
           if (queue.volume + 10 >= 100) queue.volume = 100;
           else queue.volume = queue.volume + 10;
           queue.connection.dispatcher.setVolumeLogarithmic(queue.volume / 100);
@@ -155,14 +155,14 @@ module.exports = {
 
         case "🔁":
           reaction.users.remove(user).catch(console.error);
-          if (!canModifyQueue(member)) return;
+          if (!canModifyQueue(member, message)) return;
           queue.loop = !queue.loop;
           queue.textChannel.send(`Loop is now ${queue.loop ? "**on**" : "**off**"}`).catch(console.error);
           break;
 
         case "⏹":
           reaction.users.remove(user).catch(console.error);
-          if (!canModifyQueue(member)) return;
+          if (!canModifyQueue(member, message)) return;
           queue.songs = [];
           queue.textChannel.send(`${user} ⏹ stopped the music!`).catch(console.error);
           try {

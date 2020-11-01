@@ -2,17 +2,21 @@ const db = require('quick.db')
 const { MessageEmbed } = require('discord.js')
 const { ownerId } = require("../config.json")
 const Levels = require("discord-xp");
-
+const configModel = require('../models/config')
 module.exports = {
     name: "message",
     async execute(client, message) {
-      let levelmsg = db.get(`LevelMessage_${message.guild.id}`)
-      if(levelmsg === null) {
-        db.set(`LevelMessage_${message.guild.id}`, false)
-      }
+      
+     const config = await configModel.findOne({ GuildID: message.guild.id})
+     if(!config) {
+       const aaa = new configModel({
+         GuildID: message.guild.id
+       })
+       aaa.save()
+     }
       const randomAmountOfXp = Math.floor(Math.random() * 29) + 1; // Min 1, Max 30
       const hasLeveledUp = await Levels.appendXp(message.author.id, message.guild.id, randomAmountOfXp);
-      if(levelmsg === true) {
+      if(config.levelMessage === true) {
       if(hasLeveledUp) {
         const user = await Levels.fetch(message.author.id, message.guild.id);
         message.channel.send(`${message.author}, congratulations! You have leveled up to **${user.level}**. :tada:`);

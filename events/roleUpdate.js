@@ -5,7 +5,7 @@ module.exports = {
   async execute(client, oldRole, newRole) {
     const w = await oldRole.guild.fetchWebhooks()
     const webhook = w.find(w => w.name === "Andoi");
-
+    if(!webhook) return;
     let msg = "";
     if (oldRole.name !== newRole.name) {
       msg = `Role: **${oldRole.name}** was renamed to **${newRole.name}** (${newRole})`;

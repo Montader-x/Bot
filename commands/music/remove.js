@@ -7,7 +7,7 @@ module.exports = {
   run: (client, message, args) => {
     const queue = message.client.queue.get(message.guild.id);
     if (!queue) return message.channel.send("There is no queue.").catch(console.error);
-    if (!canModifyQueue(message.member)) return;
+    if (!canModifyQueue(message.member, message)) return;
     const prefix = getServerPrefix(message.guild.id)
     if (!args.length) return message.reply(`Usage: ${prefix}remove <Queue Number>`);
     if (isNaN(args[0])) return message.reply(`Usage: ${prefix}remove <Queue Number>`);

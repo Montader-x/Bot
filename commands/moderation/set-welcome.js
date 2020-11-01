@@ -15,7 +15,7 @@ module.exports = {
     if(!channel) { //if channel is not mentioned
       return message.channel.send("Please Mention the channel first")
     }
-    
+     
     //Now we gonna use quick.db
     
     db.set(`welchannel_${message.guild.id}`, channel.id) //set id in var

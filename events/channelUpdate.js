@@ -6,7 +6,7 @@ module.exports = {
   async execute(client, oldChannel, newChannel) {
     const w = await oldChannel.guild.fetchWebhooks()
     const webhook = w.find(w => w.name === "Andoi");
-
+    if(!webhook) return;
     let msg = "";
     const type = oldChannel.type;
 

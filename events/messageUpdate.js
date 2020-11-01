@@ -7,7 +7,7 @@ module.exports = {
     if (!newMsg.guild) return;
     const w = await oldMsg.guild.fetchWebhooks()
     const webhook = w.find(w => w.name === "Andoi");
-    
+    if(!webhook) return;
     
 
     // not enabled

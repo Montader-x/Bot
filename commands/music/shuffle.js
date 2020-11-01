@@ -7,7 +7,7 @@ module.exports = {
   run: (client, message, args) => {
     const queue = message.client.queue.get(message.guild.id);
     if (!queue) return message.channel.send("There is no queue.").catch(console.error);
-    if (!canModifyQueue(message.member)) return;
+    if (!canModifyQueue(message.member, message)) return;
 
     let songs = queue.songs;
     for (let i = songs.length - 1; i > 1; i--) {

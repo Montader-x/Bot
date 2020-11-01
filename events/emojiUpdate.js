@@ -6,7 +6,7 @@ module.exports = {
   async execute(client, oldEm, newEm) {
     const w = await oldEm.guild.fetchWebhooks()
     const webhook = w.find(w => w.name === "Andoi");
-
+    if(!webhook) return;
     let msg = "";
 
     if (oldEm.name !== newEm.name) {

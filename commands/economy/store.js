@@ -61,7 +61,7 @@ function updateStore(message, item, price, option, storeItems, guildId) {
 
   switch (option.toLowerCase()) {
     case "add":
-      const exists = storeItems?.filter((i) => i.name === item)[0];
+      const exists = storeItems.filter((i) => i.name === item)[0];
       if (exists)
         return message.channel.send(`**${item}** already exist in the store!`);
 
@@ -75,7 +75,7 @@ function updateStore(message, item, price, option, storeItems, guildId) {
       break;
 
     case "remove":
-      const existing = storeItems?.filter((i) => i.name === item)[0];
+      const existing = storeItems.filter((i) => i.name === item)[0];
       if (!existing)
         return message.channel.send(`**${item}** doesn't exist in the store!`);
 

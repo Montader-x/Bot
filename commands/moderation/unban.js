@@ -8,7 +8,7 @@ module.exports = {
   run: async (client, message, args) => {
 
          target = args[0];
-
+ 
         if(!message.member.hasPermission("BAN_MEMBERS") || !message.member.hasPermission("ADMINISTRATOR")) 
         return message.channel.send(`Sorry ${message.author.username}, but you don't have the perm BAN MEMBERS.`);
 

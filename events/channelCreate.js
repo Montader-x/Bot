@@ -6,7 +6,7 @@ module.exports = {
   async execute(client, channel) {
     const w = await channel.guild.fetchWebhooks()
     const webhook = w.find(w => w.name === "Andoi");
-
+    if(!webhook) return;
     let msg = "";
 
     if (channel.type === "category") {
