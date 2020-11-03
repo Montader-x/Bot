@@ -4,9 +4,10 @@ const { getAuditChannel } = require("../utils/functions");
 module.exports = {
   name: "channelCreate",
   async execute(client, channel) {
-    const w = await channel.guild.fetchWebhooks()
-    const webhook = w.find(w => w.name === "Andoi");
-    if(!webhook) return;
+    if (channel.type === "dm") return;
+    const w = await channel.guild.fetchWebhooks();
+    const webhook = w.find((w) => w.name === "Andoi");
+    if (!webhook) return;
     let msg = "";
 
     if (channel.type === "category") {
@@ -21,6 +22,6 @@ module.exports = {
       .setColor("GREEN")
       .setTimestamp();
 
-    webhook.send(embed)
+    webhook.send(embed);
   },
 };

@@ -6,7 +6,7 @@ module.exports = model(
     new Schema({
         GuildID: String,
         UserID: String,
-        reason: Array,
+        warnings: Array,
         moderator: Array
     })
 )

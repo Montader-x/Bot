@@ -26,8 +26,6 @@ init()
 const logs = require('discord-logs');
 logs(client);
 const prefix = getServerPrefix()
-const db = require("quick.db") ;
-//const { addexp } = require("./handlers/xp.js");
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
 client.queue = new Map()

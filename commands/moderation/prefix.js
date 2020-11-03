@@ -1,5 +1,5 @@
-const db = require("quick.db")
-const { default_prefix } = require("../../config.json")
+const configModel = require("../../models/config");
+const { default_prefix } = require("../../config.json");
 
 module.exports = {
   name: "prefix",
@@ -7,30 +7,22 @@ module.exports = {
   usage: "prefix <new-prefix>",
   description: "Change the guild prefix",
   run: async (client, message, args) => {
-    
-    if(!message.member.hasPermission("ADMINISTRATOR")) {
-      return message.channel.send("You are not allowed or do not have permission to change prefix")
+    const config = await configModel.findOne({ GuildID: message.guild.id });
+    if (!message.member.hasPermission("ADMINISTRATOR")) {
+      return message.channel.send(
+        "You are not allowed or do not have permission to change prefix"
+      );
     }
-    
-    if(!args[0]) {
-      return message.channel.send("Please give the prefix that you want to set")
-    } 
-    
-    if(args[1]) {
-      return message.channel.send("You can not set prefix a double argument")
+    let prefix = args[0];
+
+    if (!prefix) {
+      config.updateOne({ GuildID: message.guild.id, prefix: "a!" });
+      message.channel.send("reseted prefix!");
     }
-    
-    if(args[0].length > 3) {
-      return message.channel.send("You can not send prefix more than 3 characters")
+    if (prefix) {
+      config.updateOne({ GuildID: message.guild.id, prefix: `${prefix}` });
+      await message.channel.send(`Prefix is now ${prefix}`);
     }
-    
-    if(args.join("") === default_prefix) {
-      db.delete(`prefix_${message.guild.id}`)
-     return await message.channel.send("Reseted Prefix ✅")
-    }
-    
-    db.set(`prefix_${message.guild.id}`, args[0])
-  await message.channel.send(`Seted Bot Prefix to ${args[0]}`)
-    
-  }
-}
+    //740295580886106233
+  },
+};

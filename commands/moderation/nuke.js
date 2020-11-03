@@ -5,10 +5,12 @@ module.exports = {
   description: "Nuke the current channel, delete all messages of the channel",
   usage: "nuke",
   aliases: ["channelnuke"],
-  category: "admin",
+  category: "moderation",
   run: async (client, message) => {
     if (!message.guild.me.hasPermission("MANAGE_CHANNELS"))
-return message.channel.send(`I dont have the correct permissions for this!`)
+      return message.channel.send(
+        `I dont have the correct permissions for this!`
+      );
 
     const user = message.member;
     if (!user.hasPermission("MANAGE_CHANNELS"))

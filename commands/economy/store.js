@@ -20,7 +20,7 @@ module.exports = {
     const option = args[0];
     let item = args.slice(1)[0]; // Take first argument after option (item)
     const price = args.slice(1)[1]; // take second argument after option (price)
-    
+     
     if (option) {
       if (message.author.id === owners[0] && message.author.id === owners[1]) {
         updateStore(message, item, price, option, storeItems, guildId);
@@ -79,10 +79,7 @@ function updateStore(message, item, price, option, storeItems, guildId) {
       if (!existing)
         return message.channel.send(`**${item}** doesn't exist in the store!`);
 
-      const updatedItems = storeItems.filter(
-        (storeItem) => storeItem.name !== item
-      );
-      removeStoreItem(guildId, updatedItems);
+      removeStoreItem(guildId, item);
       message.channel.send(`${item} was removed from the store!`);
       break;
 
