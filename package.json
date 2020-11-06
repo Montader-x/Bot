@@ -10,9 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@k3rn31p4nic/google-translate-api": "^1.1.1",
     "@types/request-promise-native": "^1.0.17",
     "alexflipnote.js": "^1.2.4",
     "ascii-table": "0.0.9",
+    "axios": "^0.21.0",
     "canvacord": "^4.0.2",
     "canvas": "^2.6.1",
     "captcha-canvas": "^2.1.1",
