@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const { ownerId } = require("../config.json");
+const { owners } = require("../config.json");
 const Levels = require("discord-xp");
 const configModel = require("../models/config");
 const Discord = require("discord.js");
@@ -74,7 +74,13 @@ module.exports = {
     let command = client.commands.get(cmd);
     // If none is found, try to find it by alias
     /**-----------------------[PERMISSIONS]--------------------- */
-    if (command.botPermission) {
+    if (command.botOwnersOnly) {
+      const botOwnersOnly = command.botOwnersOnly;
+
+      for (const owner of owners)
+        if (message.author.id !== owner)
+          return message.channel.send("You're not an owner!");
+    } else if (command.botPermission) {
       let neededPerms = [];
 
       command.botPermission.forEach((p) => {
