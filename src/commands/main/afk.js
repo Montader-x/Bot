@@ -6,6 +6,10 @@ module.exports = {
   category: "utility",
   description: "",
   run: async (client, message, args) => {
+    if (client.afk.has(message.author.id)) {
+      return message.channel.send("You are already afk!");
+    }
+
     let reason = args.join(" ");
 
     let options = {

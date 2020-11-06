@@ -6,6 +6,9 @@ module.exports = {
   category: "utility",
   description: "",
   run: async (client, message) => {
+    if (!client.afk.has(message.author.id)) {
+      return message.channel.send("You are not afk.");
+    }
     let options = {
       justafk: false,
     };

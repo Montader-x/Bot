@@ -20,6 +20,6 @@
     "bank": 0,
     "money": 0
   },
-  "Token": "haha go brr",
-  "Mongo": "mongodb+srv://Andoi:<password>@cluster0.u14vu.mongodb.net/Andoi"
+  "Token": "no",
+  "Mongo": "mongodb+srv://Andoi:AndoiGood@cluster0.u14vu.mongodb.net/Andoi"
 }

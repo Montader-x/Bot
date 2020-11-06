@@ -61,5 +61,4 @@ client.giveawaysManager = manager;
 });
 
 require("./handlers/event")(client);
-
 client.login(token.Token);

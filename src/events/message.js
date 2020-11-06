@@ -2,11 +2,12 @@ const { MessageEmbed } = require("discord.js");
 const { ownerId } = require("../config.json");
 const Levels = require("discord-xp");
 const configModel = require("../models/config");
-const Discord = require('discord.js')
+const Discord = require("discord.js");
 module.exports = {
   name: "message",
   async execute(client, message) {
     if (message.channel.type === "dm") return;
+    const mentions = message.mentions.members;
     //hey can u add me to the database
     const config = await configModel.findOne({ GuildID: message.guild.id });
     if (!config) {
@@ -46,6 +47,20 @@ module.exports = {
 
       message.channel.send(mentionEmbed);
     }
+    if (mentions && !message.content.startsWith(prefix)) {
+      mentions.forEach((member) => {
+        const user = bot.afk.get(member.id);
+
+        if (user) {
+          const embed = BaseEmbed(message)
+            .setTitle("AFK!")
+            .setDescription(
+              `${member.user.tag} is AFK!\n **Reason:** ${user.reason}`
+            );
+          message.channel.send(embed);
+        }
+      });
+    }
     if (!message.content.startsWith(prefix)) return;
 
     if (!message.member)
@@ -58,62 +73,64 @@ module.exports = {
     // Get the command
     let command = client.commands.get(cmd);
     // If none is found, try to find it by alias
-      /**-----------------------[PERMISSIONS]--------------------- */
-  if (command.botPermission) {
-    let neededPerms = [];
+    /**-----------------------[PERMISSIONS]--------------------- */
+    if (command.botPermission) {
+      let neededPerms = [];
 
-    command.botPermission.forEach((p) => {
-      if (!message.guild.me.hasPermission(p)) neededPerms.push("`" + p + "`");
-    });
+      command.botPermission.forEach((p) => {
+        if (!message.guild.me.hasPermission(p)) neededPerms.push("`" + p + "`");
+      });
 
-    if (neededPerms.length)
-      return message.channel.send(
-        `I need ${neededPerms.join(", ")} permission(s) to execute the command!`
-      );
-  } else if (command.authorPermission) {
-    let neededPerms = [];
+      if (neededPerms.length)
+        return message.channel.send(
+          `I need ${neededPerms.join(
+            ", "
+          )} permission(s) to execute the command!`
+        );
+    } else if (command.authorPermission) {
+      let neededPerms = [];
 
-    command.authorPermission.forEach((p) => {
-      if (!message.member.hasPermission(p)) neededPerms.push("`" + p + "`");
-    });
+      command.authorPermission.forEach((p) => {
+        if (!message.member.hasPermission(p)) neededPerms.push("`" + p + "`");
+      });
 
-    if (neededPerms.length)
-      return message.channel.send(
-        `You need ${neededPerms.join(
-          ", "
-        )} permission(s) to execute the command!`
-      );
-  }
-  /**------------------[COOLDOWN]-------------------------- */
-  if (!client.cooldowns.has(command.name)) {
-    client.cooldowns.set(command.name, new Discord.Collection());
-  }
-
-  const now = Date.now();
-  const timestamps = client.cooldowns.get(command.name);
-  const cooldownAmount = (command.cooldown || 0) * 1000;
-
-  if (timestamps.has(message.author.id)) {
-    const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
-
-    if (now < expirationTime) {
-      const timeLeft = (expirationTime - now) / 1000;
-      return message.reply(
-        `please wait ${timeLeft.toFixed(
-          1
-        )} more second(s) before reusing the \`${command.name}\` command.`
-      );
+      if (neededPerms.length)
+        return message.channel.send(
+          `You need ${neededPerms.join(
+            ", "
+          )} permission(s) to execute the command!`
+        );
     }
-  }
+    /**------------------[COOLDOWN]-------------------------- */
+    if (!client.cooldowns.has(command.name)) {
+      client.cooldowns.set(command.name, new Discord.Collection());
+    }
 
-  timestamps.set(message.author.id, now);
-  setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
-   try {
-    if (!command) command = client.commands.get(client.aliases.get(cmd));
-    if (message.author.bot) return;
-    if (command) command.run(client, message, args);
-   } catch (err) {
-    console.log(err);
-   }
+    const now = Date.now();
+    const timestamps = client.cooldowns.get(command.name);
+    const cooldownAmount = (command.cooldown || 0) * 1000;
+
+    if (timestamps.has(message.author.id)) {
+      const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+
+      if (now < expirationTime) {
+        const timeLeft = (expirationTime - now) / 1000;
+        return message.reply(
+          `please wait ${timeLeft.toFixed(
+            1
+          )} more second(s) before reusing the \`${command.name}\` command.`
+        );
+      }
+    }
+
+    timestamps.set(message.author.id, now);
+    setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+    try {
+      if (!command) command = client.commands.get(client.aliases.get(cmd));
+      if (message.author.bot) return;
+      if (command) command.run(client, message, args);
+    } catch (err) {
+      console.log(err);
+    }
   },
 };
