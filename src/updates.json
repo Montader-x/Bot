@@ -1,5 +1,5 @@
 {
- "1": {"name": "fixed", "description": "logging + it creates a webhook so we dont get rate limited"},
- "2": {"name": "added", "description": "music category"},
- "3": {"name": "removed", "description": "nothing"}
+ "1": {"name": "fixed", "description": "Fixed some commands not responding"},
+ "2": {"name": "added", "description": "enable and disable command or category , mongoDB, settings command, added corona command back"},
+ "3": {"name": "removed", "description": "ticket system and reaction roles"}
 }
