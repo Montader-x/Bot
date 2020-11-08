@@ -1,18 +1,18 @@
-
-const { MessageEmbed } = require("discord.js");
+const logBed = require("../utils/logBed");
 
 module.exports = {
   name: "guildMemberUpdate",
   async execute(client, newMember, oldMember) {
-    const w = await newMember.guild.fetchWebhooks()
-    const webhook = w.find(w => w.name === "Andoi");
-    if(!webhook) return;
+    if (!newMember.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
+    const w = await newMember.guild.fetchWebhooks();
+    const webhook = w.find((w) => w.name === "Andoi");
+    if (!webhook) return;
     if (!oldMember.guild) return;
     const avatar = newMember.user.displayAvatarURL({ dynamic: true });
 
     // not enabled
 
-    const embed = new MessageEmbed()
+    const embed = logBed(client)
       .setAuthor(`${newMember.user.tag}`, avatar)
       .setTimestamp()
       .setColor("ORANGE");
@@ -28,7 +28,7 @@ module.exports = {
         .addField("Nickname", `${newNickname} ➔ ${oldNickname}`);
 
       // send message
-      webhook.send(embed)
+      webhook.send(embed);
     }
 
     // Role add
@@ -42,7 +42,7 @@ module.exports = {
         .setDescription(`${newMember} was **given** the ${role} role.`);
 
       // send message
-      webhook.send(embed)
+      webhook.send(embed);
     }
 
     // Role remove
@@ -56,7 +56,7 @@ module.exports = {
         .setDescription(`${newMember} was **removed** from ${role} role.`);
 
       // send message
-      webhook.send(embed)
+      webhook.send(embed);
     }
   },
 };

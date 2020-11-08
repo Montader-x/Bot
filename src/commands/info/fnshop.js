@@ -1,7 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 module.exports = {
   name: "fortniteshop",
-  category: "info",
+  category: "utility",
   description: "Get info about the fortnite shop from today",
   aliases: ["fnshop"],
   usage: "FortniteShop",

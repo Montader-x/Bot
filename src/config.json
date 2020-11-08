@@ -1,5 +1,5 @@
 {
-  "youtubeApiKey": "",
+  "youtubeApiKey": "AIzaSyBiB5mZYPRWrdkoyQCkJZ2vH_fVM7CkLlo",
   "default_prefix": "c!",
   "everyoneMention": false,
   "hostedBy": true,
@@ -20,6 +20,6 @@
     "bank": 0,
     "money": 0
   },
-  "Token": "no",
+  "Token": "NzE4ODE2ODc3MjQ5NTYwNjI4.XtuYYg.agK_FKVBoT835gpcC-fHbfywL9E",
   "Mongo": "mongodb+srv://Andoi:AndoiGood@cluster0.u14vu.mongodb.net/Andoi"
 }

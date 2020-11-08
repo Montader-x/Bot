@@ -1,7 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 module.exports = {
   name: "membercount",
-  category: "info",
+  category: "utility",
   description: "get the membercount of the server",
   aliases: ["memberc"],
   usage: "membercount",

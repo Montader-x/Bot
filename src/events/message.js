@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const { ownerId } = require("../config.json");
+const { owners } = require("../config.json");
 const Levels = require("discord-xp");
 const configModel = require("../models/config");
 const Discord = require("discord.js");
@@ -16,6 +16,8 @@ module.exports = {
       });
       aaa.save();
     }
+    const disabled = config.disabled;
+    const commands = config.commands;
     const randomAmountOfXp = Math.floor(Math.random() * 29) + 1; // Min 1, Max 30
     const hasLeveledUp = await Levels.appendXp(
       message.author.id,
@@ -49,10 +51,10 @@ module.exports = {
     }
     if (mentions && !message.content.startsWith(prefix)) {
       mentions.forEach((member) => {
-        const user = bot.afk.get(member.id);
+        const user = client.afk.get(member.id);
 
         if (user) {
-          const embed = BaseEmbed(message)
+          const embed = new MessageEmbed()
             .setTitle("AFK!")
             .setDescription(
               `${member.user.tag} is AFK!\n **Reason:** ${user.reason}`
@@ -74,6 +76,12 @@ module.exports = {
     let command = client.commands.get(cmd);
     // If none is found, try to find it by alias
     /**-----------------------[PERMISSIONS]--------------------- */
+    if (command.botOwnersOnly) {
+      const botOwnersOnly = command.botOwnersOnly;
+
+      if (message.author.id !== owners[0] && message.author.id !== owners[1])
+        return message.reply("Only the owner is allowed to run this command");
+    }
     if (command.botPermission) {
       let neededPerms = [];
 
@@ -125,6 +133,16 @@ module.exports = {
 
     timestamps.set(message.author.id, now);
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+    if (disabled.length > 0) {
+      if (disabled.includes(command.category)) {
+        return message.channel.send("That category is disabled for this guild");
+      }
+    }
+    if (commands.length > 0) {
+      if (commands.includes(command.name)) {
+        return message.channel.send("That command was disabled for this guild");
+      }
+    }
     try {
       if (!command) command = client.commands.get(client.aliases.get(cmd));
       if (message.author.bot) return;

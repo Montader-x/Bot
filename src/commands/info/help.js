@@ -1,5 +1,4 @@
 const { MessageEmbed } = require("discord.js");
-const db = require("quick.db");
 const Invite =
   "https://discord.com/api/oauth2/authorize?client_id=728694375739162685&permissions=0&scope=bot";
 
@@ -10,8 +9,8 @@ module.exports = {
   usage: "help <cmd>",
   category: "info",
   run: async (client, message, args) => {
-    const prefix = db.get(`prefix_${message.guild.id}`);
-
+    const e = await client.getConfig(message.guild);
+    const prefix = e.prefix;
     if (args[0]) {
       const command = await client.commands.get(args[0]);
 

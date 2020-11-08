@@ -2,7 +2,7 @@ const { bugchannel } = require("../../config.json");
 const { MessageEmbed } = require("discord.js");
 module.exports = {
   name: "report-bug",
-  category: "support",
+  category: "utility",
   description: "report a bug to us",
   aliases: ["bg"],
   usage: "report-bug <bug>",

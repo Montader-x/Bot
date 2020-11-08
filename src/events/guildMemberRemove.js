@@ -1,5 +1,4 @@
 const { MessageEmbed } = require("discord.js");
-const db = require('quick.db')
 
 module.exports = {
   name: "guildMemberRemove",
@@ -11,7 +10,6 @@ module.exports = {
     if (leaveChannel === null || !leaveChannel) return;
 
     // channel not found/deleted
-
 
     const embed = new MessageEmbed()
       .setTitle("👋 Goodbye!")

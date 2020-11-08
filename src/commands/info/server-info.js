@@ -33,7 +33,7 @@ const regions = {
 
 module.exports = {
   name: "serverinfo",
-  category: "info",
+  category: "utility",
   aliases: ["si"],
   description: "Get Info About The Server.",
   usage: "serverinfo",

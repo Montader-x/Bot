@@ -1,4 +1,3 @@
-
 module.exports = {
   name: "addrole",
   category: "moderation",
@@ -6,8 +5,8 @@ module.exports = {
   aliases: ["ar"],
   usage: "addrole <role> <user> or addrole <id> <role>",
   run: async (client, message, args) => {
-   if (!message.member.hasPermission("MANAGE_ROLES"))
-      return message.channel.send('i do not have manage roles permissions');
+    if (!message.guild.me.hasPermission("MANAGE_ROLES"))
+      return message.channel.send("i do not have manage roles permissions");
 
     if (!message.member.hasPermission("MANAGE_ROLES" || "ADMINISTRATOR"))
       return message.channel.send("You don't have permissions for that!");
@@ -29,5 +28,5 @@ module.exports = {
     needsRole.roles.add(role.id);
 
     message.channel.send(`Successfully Added **${role.name}** to ${needsRole}`);
-  }
-}
+  },
+};

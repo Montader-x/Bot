@@ -10,7 +10,7 @@ const client = new Discord.Client({
   partials: ["MESSAGE", "REACTION", "USER", "GUILD_MEMBER"],
   ws: { properties: { $browser: "Discord Android" } },
 });
-const shardManager = new ShardingManager("./index.js", {
+const shardManager = new ShardingManager("./src/index.js", {
   // for ShardingManager options see:
   // https://discord.js.org/#/docs/main/v11/class/ShardingManager
 
@@ -44,7 +44,7 @@ const GiveawayManagerWithShardSupport = class extends GiveawaysManager {
 
 // Create a new instance of your new class
 const manager = new GiveawayManagerWithShardSupport(client, {
-  storage: "./giveaways.json",
+  storage: "./src/giveaways.json",
   updateCountdownEvery: 10000,
   default: {
     botsCanWin: false,

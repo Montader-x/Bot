@@ -1,4 +1,3 @@
-const db = require("quick.db");
 const moment = require("moment");
 const storeModel = require("../models/store");
 const userModel = require("../models/userEco");

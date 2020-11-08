@@ -2,7 +2,6 @@ const { oneLine } = require("common-tags");
 const Discord = require("discord.js");
 const moment = require("moment");
 
-
 const serverflags = {
   DISCORD_EMPLOYEE: ` <:757681878064169051:757978989691404389> \`Discord Employee\``,
   DISCORD_PARTNER: `<:753221825525317704:757982754687156287> \`Discord Partner\``,
@@ -18,20 +17,19 @@ const serverflags = {
   VERIFIED_BOT: `<:753702142136549476:757978989846331512> \`Verified Bot\``,
   VERIFIED_DEVELOPER: `<:753702339793256588:757978990064435335> \`Verified Bot Developer\``,
 };
-    const st = {
-      "online": "<:755519938118156400:757978989577896018> Online",
-      "idle": "<:755520201055010846:757978989817233459> IDLE",
-      "offline": "<:755520068451827824:757978989946994769> Offline",
-      "dnd": "<:755519807490621552:757978989380763729> Do Not Disturb",
-    }
-
+const st = {
+  online: "<:755519938118156400:757978989577896018> Online",
+  idle: "<:755520201055010846:757978989817233459> IDLE",
+  offline: "<:755520068451827824:757978989946994769> Offline",
+  dnd: "<:755519807490621552:757978989380763729> Do Not Disturb",
+};
 
 module.exports = {
-  name: "info",
+  name: "userinfo",
   description: "Shows the info about an user account",
-  category: "info",
+  category: "utility",
   usage: "info",
-  aliases: ["whois", "userinfo", "ui"],
+  aliases: ["whois", "ui"],
   run: async (client, message, args) => {
     const member =
       message.mentions.members.first() ||
@@ -41,10 +39,10 @@ module.exports = {
     const nickname = member.nickname || "*None*";
     const discriminator = member.user.discriminator || "*None*";
 
-    const createdAt = moment.utc(member.user.createdAt).calendar()
-    const lp = moment.utc(member.user.createdAt).fromNow()
-    const joinedAt = moment.utc(member.joinedAt).calendar()
-    const lap = moment.utc(member.joinedAt).fromNow()
+    const createdAt = moment.utc(member.user.createdAt).calendar();
+    const lp = moment.utc(member.user.createdAt).fromNow();
+    const joinedAt = moment.utc(member.joinedAt).calendar();
+    const lap = moment.utc(member.joinedAt).fromNow();
 
     let userFlags = (await member.user.fetchFlags())
       .toArray()
@@ -63,46 +61,47 @@ module.exports = {
     const bot = member.user.bot ? "Yes" : "No";
 
     const activities =
-      member.user.presence.activities.length === 0 ?
-      {
-        status: "*None*",
-        other: [],
-      } :
-      member.user.presence.activities.reduce(
-        (activities, activity) => {
-          switch (activity.type) {
-            case "CUSTOM_STATUS":
-              activities.status = `${
+      member.user.presence.activities.length === 0
+        ? {
+            status: "*None*",
+            other: [],
+          }
+        : member.user.presence.activities.reduce(
+            (activities, activity) => {
+              switch (activity.type) {
+                case "CUSTOM_STATUS":
+                  activities.status = `${
                     activity.emoji ? `${activity.emoji} | ` : ""
                   }${activity.state}`;
-              break;
-            case "PLAYING":
-              activities.other.push(`${activity.type} ${activity.name}`);
-              break;
-            case "LISTENING":
-              if (activity.name === "Spotify" && activity.assets) {
-                activities.other.push(
-                  `${activity.details} by ${activity.state}`
-                );
+                  break;
+                case "PLAYING":
+                  activities.other.push(`${activity.type} ${activity.name}`);
+                  break;
+                case "LISTENING":
+                  if (activity.name === "Spotify" && activity.assets) {
+                    activities.other.push(
+                      `${activity.details} by ${activity.state}`
+                    );
+                  }
+                  break;
+                default:
+                  activities.other.push(activity.type);
               }
-              break;
-            default:
-              activities.other.push(activity.type);
-          }
 
-          return activities;
-        }, {
-          status: "*None*",
-          other: [],
-        }
-      );
+              return activities;
+            },
+            {
+              status: "*None*",
+              other: [],
+            }
+          );
 
-    const roles = member.roles.cache.array().length ?
-      member.roles.cache
-      .array()
-      .filter((role) => role.name !== "@everyone")
-      .join(", ") :
-      "*None*";
+    const roles = member.roles.cache.array().length
+      ? member.roles.cache
+          .array()
+          .filter((role) => role.name !== "@everyone")
+          .join(", ")
+      : "*None*";
     const highestRole = member.roles.highest || "*None*";
     const hoistRole = member.roles.hoist || "*None*";
     let status = st[member.presence.status];
@@ -157,24 +156,25 @@ module.exports = {
         },
         {
           name: "🥇Highest Role",
-          value: highestRole || 'None',
+          value: highestRole || "None",
           inline: true,
         },
         {
           name: "Hoist Role",
-          value: hoistRole || 'None',
+          value: hoistRole || "None",
           inline: true,
         },
         {
           name: " Activities",
-          value: activities.other && activities.other.length ?
-            activities.other.join("\n") :
-            "*None*",
+          value:
+            activities.other && activities.other.length
+              ? activities.other.join("\n")
+              : "*None*",
           inline: true,
         },
         {
           name: ` Roles (${member.roles.cache.size - 1})`,
-          value: roles || 'None',
+          value: roles || "None",
           inline: true,
         }
       );

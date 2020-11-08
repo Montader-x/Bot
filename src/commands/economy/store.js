@@ -5,7 +5,6 @@ const {
   setStoreItems,
   removeStoreItem,
 } = require("../../utils/economy");
-const db = require('quick.db')
 
 module.exports = {
   name: "store",
@@ -14,13 +13,14 @@ module.exports = {
   aliases: ["shop"],
   usage: "store| store add| store remove",
   run: async (client, message, args) => {
+    const e = await client.getConfig(message.guild);
     const guildId = message.guild.id;
     const storeItems = await getStoreItems(guildId);
-    const prefix = await db.get(`prefix_${message.guild.id}`)
+    const prefix = e.prefix;
     const option = args[0];
     let item = args.slice(1)[0]; // Take first argument after option (item)
     const price = args.slice(1)[1]; // take second argument after option (price)
-     
+
     if (option) {
       if (message.author.id === owners[0] && message.author.id === owners[1]) {
         updateStore(message, item, price, option, storeItems, guildId);

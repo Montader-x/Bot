@@ -1,15 +1,16 @@
-const { MessageEmbed } = require("discord.js");
+const logBed = require("../utils/logBed");
 //its a line i forgot to remove dont mind it
 
 module.exports = {
   name: "channelUpdate",
   async execute(client, oldChannel, newChannel) {
-    const w = await oldChannel.guild.fetchWebhooks()
-    const webhook = w.find(w => w.name === "Andoi");
-    if(!webhook) return;
+    if (!oldChannel.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
+    const w = await oldChannel.guild.fetchWebhooks();
+    const webhook = w.find((w) => w.name === "Andoi");
+    if (!webhook) return;
     let msg = "";
     const type = oldChannel.type;
-
+    let permissions;
     if (type === "category") {
       if (oldChannel.name !== newChannel.name) {
         msg = `Category **${newChannel}** was updated from \`${oldChannel.name}\` to \`${newChannel.name}\``;
@@ -26,12 +27,12 @@ module.exports = {
       }
     }
 
-    const embed = new MessageEmbed()
+    const embed = logBed(client)
       .setTitle("Channel Updated")
       .setDescription(msg)
       .setColor("ORANGE")
       .setTimestamp();
 
-    webhook.send(embed)
+    webhook.send(embed);
   },
 };

@@ -15,5 +15,7 @@ module.exports = model(
       default: configDefaultSettings.levelMessage,
     },
     prefix: { type: String, default: configDefaultSettings.prefix },
+    disabled: { type: Array, default: [] },
+    commands: { type: Array, default: [] },
   })
 );
