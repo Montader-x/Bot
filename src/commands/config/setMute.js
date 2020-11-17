@@ -15,7 +15,10 @@ module.exports = {
 
     if (!role) {
       //if channel is not mentioned
-      return message.channel.send("Please Mention the role first");
+      await client.updateConfig(message.guild, { muteRole: null });
+      message.channel.send(
+        "The mute role has been reset since no role was provided"
+      );
     }
 
     //Now we gonna use quick.db

@@ -1,4 +1,3 @@
 node_modules
 template/command.js
 json.sqlite
-commands/economy/store.js

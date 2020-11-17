@@ -13,7 +13,10 @@ module.exports = {
 
     if (!channel) {
       //if channel is not mentioned
-      return message.channel.send("Please Mention the channel first");
+      await client.updateConfig(message.guild, { leaveChannel: null });
+      message.channel.send(
+        "The leave channel has been reset since no channel was provided"
+      );
     }
 
     await client.updateConfig(message.guild, { leaveChannel: channel.id });

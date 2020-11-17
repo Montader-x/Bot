@@ -3,6 +3,7 @@ const { owners } = require("../config.json");
 const Levels = require("discord-xp");
 const configModel = require("../models/config");
 const Discord = require("discord.js");
+const games = new Map();
 module.exports = {
   name: "message",
   async execute(client, message) {
@@ -143,10 +144,13 @@ module.exports = {
         return message.channel.send("That command was disabled for this guild");
       }
     }
+    const ops = {
+      games: games,
+    };
     try {
       if (!command) command = client.commands.get(client.aliases.get(cmd));
       if (message.author.bot) return;
-      if (command) command.run(client, message, args);
+      if (command) command.run(client, message, args, ops);
     } catch (err) {
       console.log(err);
     }

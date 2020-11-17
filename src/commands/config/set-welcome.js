@@ -12,8 +12,10 @@ module.exports = {
     let channel = message.mentions.channels.first(); //mentioned channel
 
     if (!channel) {
-      //if channel is not mentioned
-      return message.channel.send("Please Mention the channel first");
+      await client.updateConfig(message.guild, { welcomeChannel: null });
+      message.channel.send(
+        "The welcome channel has been reset since no channel was provided"
+      );
     }
 
     await client.updateConfig(message.guild, { welcomeChannel: channel.id });

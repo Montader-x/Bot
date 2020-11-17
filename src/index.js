@@ -8,7 +8,17 @@ const { GiveawaysManager } = require("discord-giveaways");
 const client = new Discord.Client({
   disableMentions: "everyone",
   partials: ["MESSAGE", "REACTION", "USER", "GUILD_MEMBER"],
-  ws: { properties: { $browser: "Discord Android" } },
+  ws: {
+    intents: [
+      "GUILDS",
+      "GUILD_MEMBERS",
+      "GUILD_MESSAGES",
+      "GUILD_BANS",
+      "GUILD_WEBHOOKS",
+      "GUILD_EMOJIS",
+    ],
+    properties: { $browser: "Discord Android" },
+  },
 });
 const shardManager = new ShardingManager("./src/index.js", {
   // for ShardingManager options see:
