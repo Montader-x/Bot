@@ -1,3 +1,5 @@
+const yes = ["yes", "y", "ye", "yea", "correct"];
+const no = ["no", "n", "nah", "nope", "fuck off"];
 async function verify(
   channel,
   user,
@@ -43,8 +45,43 @@ async function promptMessage(message, author, time, validReactions) {
     .awaitReactions(filter, { max: 1, time: time })
     .then((collected) => collected.first() && collected.first().emoji.name);
 }
+function wrapText(ctx, text, maxWidth) {
+  return new Promise((resolve) => {
+    if (ctx.measureText(text).width < maxWidth) return resolve([text]);
+    if (ctx.measureText("W").width > maxWidth) return resolve(null);
+    const words = text.split(" ");
+    const lines = [];
+    let line = "";
+    while (words.length > 0) {
+      let split = false;
+      while (ctx.measureText(words[0]).width >= maxWidth) {
+        const temp = words[0];
+        words[0] = temp.slice(0, -1);
+        if (split) {
+          words[1] = `${temp.slice(-1)}${words[1]}`;
+        } else {
+          split = true;
+          words.splice(1, 0, temp.slice(-1));
+        }
+      }
+      if (ctx.measureText(`${line}${words[0]}`).width < maxWidth) {
+        line += `${words.shift()} `;
+      } else {
+        lines.push(line.trim());
+        line = "";
+      }
+      if (words.length === 0) lines.push(line.trim());
+    }
+    return resolve(lines);
+  });
+}
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 module.exports = {
   verify,
   list,
+  delay,
   promptMessage,
+  wrapText,
 };

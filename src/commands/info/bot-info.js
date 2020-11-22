@@ -1,48 +1,51 @@
-const { MessageEmbed, user } = require("discord.js");
-const os = require("os");
-const ms = require("ms");
-const cpuStat = require("cpu-stat");
-const Discord = require("discord.js");
+const { MessageEmbed } = require("discord.js");
+const moment = require("moment");
+const { mem, cpu, os } = require("node-os-utils");
+const { stripIndent } = require("common-tags");
 module.exports = {
   name: "botinfo",
   description: "get info about the  bot",
+  aliases: ["stats"],
   category: "info",
   usage: "botinfo",
   run: async (client, message, args) => {
-    let user = client.user;
-    let core = os.cpus()[0];
-    let embedStats = new MessageEmbed()
-      // .setAuthor(this.client.user.username)
-      .setTitle("__**Stats:**__")
-      .setColor("BLUE")
+    const d = moment.duration(message.client.uptime);
+    const days = d.days() == 1 ? `${d.days()} day` : `${d.days()} days`;
+    const hours = d.hours() == 1 ? `${d.hours()} hour` : `${d.hours()} hours`;
+    const clientStats = stripIndent`
+      Servers   :: ${message.client.guilds.cache.size}
+      Users     :: ${message.client.users.cache.size}
+      Channels  :: ${message.client.channels.cache.size}
+      WS Ping   :: ${Math.round(message.client.ws.ping)}ms
+      Uptime    :: ${days} and ${hours}
+    `;
+    const { totalMemMb, usedMemMb } = await mem.info();
+    const serverStats = stripIndent`
+      OS        :: ${await os.oos()}
+      CPU       :: ${cpu.model()}
+      Cores     :: ${cpu.count()}
+      CPU Usage :: ${await cpu.usage()} %
+      RAM       :: ${totalMemMb} MB
+      RAM Usage :: ${usedMemMb} MB 
+    `;
+
+    const embed = new MessageEmbed()
+      .setTitle("Bot's Statistics")
       .addField(
-        "**General**",
-        [
-          `**Client:** ${client.user.tag}\n(${client.user.id})`,
-          `**Commands:** ${client.commands.size}`,
-          `**Users:** ${client.users.cache.size}`,
-          `**Servers:** ${client.guilds.cache.size}`,
-          `**Channels:** ${client.channels.cache.size}`,
-          `**NodeJS:** ${process.version}`,
-          `**Client Uptime:** ${ms(client.uptime, { long: true })}`,
-          "\u200b",
-          `**source code:** [click here](https://www.youtube.com/watch?v=dQw4w9WgXcQ)`,
-        ],
+        "Commands",
+        `\`${message.client.commands.size}\` commands`,
         true
       )
-      .addField(
-        "**System**",
-        [
-          `\u3000 **Uptime:** ${ms(client.uptime, { long: true })}`,
-          `**CPU:**`,
-          `\u3000 **Cores:** ${os.cpus().length}`,
-          `\u3000 **Model:** ${core.model}`,
-          `\u3000 **Speed:** ${core.speed}Mhz`,
-          "\u200b",
-        ],
-        true
+      .addField("Aliases", `\`${message.client.aliases.size}\` aliases`, true)
+      .addField("Client", `\`\`\`asciidoc\n${clientStats}\`\`\``)
+      .addField("Server", `\`\`\`asciidoc\n${serverStats}\`\`\``)
+      .addField("Links", "**[Invite Me](http://aerv.ga/)**")
+      .setFooter(
+        message.member.displayName,
+        message.author.displayAvatarURL({ dynamic: true })
       )
-      .setFooter("andoi's stats");
-    message.channel.send(embedStats);
+      .setTimestamp()
+      .setColor(message.guild.me.displayHexColor);
+    message.channel.send(embed);
   },
 };

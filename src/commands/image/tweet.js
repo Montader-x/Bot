@@ -1,20 +1,27 @@
 const { MessageEmbed } = require("discord.js");
 const fetch = require("node-fetch");
+
 module.exports = {
-  name: "changemymind",
-  category: "fun",
-  description: "tell someone to change your mind",
-  usage: "changemymind <text>",
+  name: "tweet",
+  category: "image",
+  description: "tweet for fun without twitter",
+  usage: "tweet <message>",
   run: async (client, message, args) => {
-  const text = args.join(" ");
+    const text = args.join(" ");
+    const { username } = message.author;
 
     if (!text) return message.channel.send("Please provide text");
 
     const sendMsg = await message.channel.send("⚙ Processing Image..");
 
     const data = await fetch(
-      `https://nekobot.xyz/api/imagegen?type=changemymind&text=${text}`
-    ).then((res) => res.json());
+      `https://nekobot.xyz/api/imagegen?type=tweet&text=${text}&username=${username}`
+    )
+      .then((res) => res.json())
+      .catch((e) => {
+        console.error(e);
+        message.channel.send("Something went wrong!");
+      });
 
     sendMsg.delete();
     const embed = new MessageEmbed()
@@ -27,5 +34,5 @@ module.exports = {
       .setTimestamp();
 
     message.channel.send({ embed });
-  }
-}
+  },
+};

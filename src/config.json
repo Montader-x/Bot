@@ -20,6 +20,7 @@
     "bank": 0,
     "money": 0
   },
-  "Token": "O: secret haha",
-  "Mongo": "mongodb+srv://Andoi:AndoiGood@cluster0.u14vu.mongodb.net/Andoi"
+  "Token": "NzE4ODE2ODc3MjQ5NTYwNjI4.XtuYYg.agK_FKVBoT835gpcC-fHbfywL9E",
+  "Mongo": "mongodb+srv://Andoi:AndoiGood@cluster0.u14vu.mongodb.net/Andoi",
+  "news": "21619b90f4bb489e9a644386e7886ce2"
 }

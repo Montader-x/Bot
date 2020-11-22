@@ -9,14 +9,6 @@ const client = new Discord.Client({
   disableMentions: "everyone",
   partials: ["MESSAGE", "REACTION", "USER", "GUILD_MEMBER"],
   ws: {
-    intents: [
-      "GUILDS",
-      "GUILD_MEMBERS",
-      "GUILD_MESSAGES",
-      "GUILD_BANS",
-      "GUILD_WEBHOOKS",
-      "GUILD_EMOJIS",
-    ],
     properties: { $browser: "Discord Android" },
   },
 });

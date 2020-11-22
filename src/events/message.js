@@ -7,6 +7,7 @@ const games = new Map();
 module.exports = {
   name: "message",
   async execute(client, message) {
+    if (message.author.bot) return;
     if (message.channel.type === "dm") return;
     const mentions = message.mentions.members;
     //hey can u add me to the database
@@ -71,11 +72,12 @@ module.exports = {
 
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const cmd = args.shift();
-
     if (cmd.length === 0) return;
     // Get the command
     let command = client.commands.get(cmd);
     // If none is found, try to find it by alias
+    if (!command) command = client.commands.get(client.aliases.get(cmd));
+
     /**-----------------------[PERMISSIONS]--------------------- */
     if (command.botOwnersOnly) {
       const botOwnersOnly = command.botOwnersOnly;
@@ -148,8 +150,6 @@ module.exports = {
       games: games,
     };
     try {
-      if (!command) command = client.commands.get(client.aliases.get(cmd));
-      if (message.author.bot) return;
       if (command) command.run(client, message, args, ops);
     } catch (err) {
       console.log(err);

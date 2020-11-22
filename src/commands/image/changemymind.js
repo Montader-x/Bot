@@ -1,21 +1,22 @@
 const { MessageEmbed } = require("discord.js");
 const fetch = require("node-fetch");
 module.exports = {
-  name: "trash",
-  category: "fun",
-  description: "put someone in the garbage can",
-  usage: "changemymind <member>",
+  name: "changemymind",
+  category: "image",
+  description: "tell someone to change your mind",
+  usage: "changemymind <text>",
   run: async (client, message, args) => {
+    const text = args.join(" ");
 
-    const user = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member;
-    const url = user.user.displayAvatarURL()
+    if (!text) return message.channel.send("Please provide text");
+
     const sendMsg = await message.channel.send("⚙ Processing Image..");
 
     const data = await fetch(
-      `https://nekobot.xyz/api/imagegen?type=trash&url=${url}`
+      `https://nekobot.xyz/api/imagegen?type=changemymind&text=${text}`
     ).then((res) => res.json());
 
-    
+    sendMsg.delete();
     const embed = new MessageEmbed()
       .setFooter(message.author.username)
       .setColor("BLUE")
@@ -24,7 +25,7 @@ module.exports = {
       )
       .setImage(data.message)
       .setTimestamp();
-   
-      sendMsg.edit(embed);
-  }
-}
+
+    message.channel.send({ embed });
+  },
+};
