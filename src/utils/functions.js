@@ -1,3 +1,4 @@
+
 const yes = ["yes", "y", "ye", "yea", "correct"];
 const no = ["no", "n", "nah", "nope", "fuck off"];
 async function verify(
