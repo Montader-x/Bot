@@ -1,5 +1,5 @@
 const { readdirSync } = require("fs");
-
+const { Collection } = require("discord.js");
 module.exports = (client) => {
   // Read every commands subfolder
   readdirSync("./src/commands/").forEach((dir) => {
@@ -15,6 +15,11 @@ module.exports = (client) => {
       let pull = require(`../commands/${dir}/${file}`);
 
       if (pull.name) {
+        const cooldowns = client.cooldowns;
+
+        if (!cooldowns.has(pull.name)) {
+          cooldowns.set(pull.name, new Collection());
+        }
         //Setting cliet.commands to the files' names
         client.commands.set(pull.name, pull);
 

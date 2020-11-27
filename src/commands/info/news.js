@@ -8,6 +8,7 @@ module.exports = {
   description: "Replies with the 5 latest world news headlines",
   category: "info",
   usage: " ",
+  cooldown: 4,
   run: async (bot, message, args) => {
     try {
       const response = await fetch(

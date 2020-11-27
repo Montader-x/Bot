@@ -1,7 +1,8 @@
 const { MessageEmbed } = require("discord.js");
 
 const categories = [
-  "animals, economy",
+  "animals",
+  "economy",
   "levels",
   "utility",
   "moderation",
@@ -9,6 +10,7 @@ const categories = [
   "giveaway",
   "games",
   "fun",
+  "tickets",
 ];
 
 module.exports = {
