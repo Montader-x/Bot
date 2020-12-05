@@ -6,7 +6,7 @@ module.exports = {
   aliases: ["calc", "calculator"],
   description: "Shows Calculated Answers Of User's Query",
   usage: "[query](mathematical)",
-
+  category: "fun",
   run: async (bot, message, args) => {
     if (!args[0])
       return message.channel.send("**Enter Something To Calculate**");

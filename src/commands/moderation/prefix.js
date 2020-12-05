@@ -3,7 +3,7 @@ const { default_prefix } = require("../../config.json");
 
 module.exports = {
   name: "prefix",
-  category: "moderation",
+  category: "config",
   usage: "prefix <new-prefix>",
   description: "Change the guild prefix",
   run: async (client, message, args) => {
@@ -16,9 +16,13 @@ module.exports = {
     let prefix = args[0];
 
     if (!prefix) {
-      await client.updateConfig(message.guild, { prefix: client.config.configDefaultSettings.prefix });
+      await client.updateConfig(message.guild, {
+        prefix: client.config.configDefaultSettings.prefix,
+      });
       message.channel.send("reseted prefix!");
     }
+    if (prefix.length > 5)
+      return message.channel.send("Prefix must be less long than 5 characters");
     if (prefix) {
       await client.updateConfig(message.guild, { prefix: prefix });
       await message.channel.send(`Prefix is now ${prefix}`);

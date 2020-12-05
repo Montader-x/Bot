@@ -10,8 +10,7 @@ module.exports = {
       return message.channel.send(
         `${message.author.tag} You don't have perms to do that.`
       );
-    let role =
-      message.mentions.roles.first() || message.guild.roles.cache.get(args[0]); //mentioned channel
+    let role = client.findRole(message, args, false); //mentioned channel
 
     if (!role) {
       //if channel is not mentioned

@@ -8,36 +8,11 @@ module.exports = {
   usage:
     "[first mention | first username | first ID | first nickname] <second mention | second username | second ID | second nickname>",
   description: "Draws A User's Avatar Over Other User's Avatar",
-  run: async (bot, message, args) => {
+  run: async (client, message, args) => {
     if (!message.guild.me.hasPermission("ATTACH_FILES"))
       return message.channel.send("**Missing Permissions - [ATTACH_FILES]!**");
-    if (!args[0])
-      return message.channel.send(
-        "**Which User Would You Like To Be The Base?**"
-      );
-    if (!args[1])
-      return message.channel.send(
-        "**Which User Would You Like To Put Over The Base?**"
-      );
-    let base =
-      message.mentions.members.first() ||
-      message.guild.members.cache.get(args[0]) ||
-      message.guild.members.cache.find(
-        (r) => r.user.username.toLowerCase() === args[0].toLocaleLowerCase()
-      ) ||
-      message.guild.members.cache.find(
-        (r) => r.displayName === args[0].toLocaleLowerCase()
-      );
-    if (!base) return message.channel.send("**Base User Not Found!**");
-    let overlay =
-      message.mentions.members.first(2)[1] ||
-      message.guild.members.cache.get(args[1]) ||
-      message.guild.members.cache.find(
-        (r) => r.user.username.toLowerCase() === args[1].toLocaleLowerCase()
-      ) ||
-      message.guild.members.cache.find(
-        (r) => r.displayName === args[1].toLocaleLowerCase()
-      );
+    let base = message.member;
+    let overlay = client.findMember(message, args, false);
     if (!overlay) return message.channel.send("**Overlay User Not Found!**");
     const baseAvatarURL = base.user.displayAvatarURL({
       format: "png",

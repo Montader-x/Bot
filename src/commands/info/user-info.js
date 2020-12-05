@@ -31,10 +31,7 @@ module.exports = {
   usage: "info",
   aliases: ["whois", "ui"],
   run: async (client, message, args) => {
-    const member =
-      message.mentions.members.first() ||
-      message.guild.members.cache.find((u) => u.id === args[0]) ||
-      message.member;
+    const member = client.findMember(message, args, true);
 
     const nickname = member.nickname || "*None*";
     const discriminator = member.user.discriminator || "*None*";
@@ -48,8 +45,6 @@ module.exports = {
       .toArray()
       .map((flag) => serverflags[flag]);
     if (!userFlags || !userFlags.length) userFlags = "*None*";
-
-    console.log(userFlags);
 
     const avatar =
       member.user.displayAvatarURL({

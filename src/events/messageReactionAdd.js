@@ -16,6 +16,7 @@ module.exports = {
     const guildDoc = await guildModel.findOne({
       GuildID: reaction.message.guild.id,
     });
+    if (guildDoc.msg === null) return;
     const ticketDoc = await ticketModel.findOne({
       guild: reaction.message.guild.id,
       channelID: message.channel.id,

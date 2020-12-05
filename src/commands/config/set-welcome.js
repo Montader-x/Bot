@@ -9,7 +9,7 @@ module.exports = {
       return message.channel.send(
         `${message.author.tag} You don't have perms to do that.`
       );
-    let channel = message.mentions.channels.first(); //mentioned channel
+    let channel = client.findChannel(message, args, false);
 
     if (!channel) {
       await client.updateConfig(message.guild, { welcomeChannel: null });
@@ -18,8 +18,9 @@ module.exports = {
       );
     }
 
-    await client.updateConfig(message.guild, { welcomeChannel: channel.id });
-
+    await client.updateConfig(message.guild, {
+      welcomeChannel: channel.id,
+    });
     message.channel.send(`Welcome Channel is setted as ${channel}`); //send success message
   },
 };

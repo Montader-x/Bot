@@ -1,3 +1,5 @@
+const { MessageEmbed } = require("discord.js");
+
 const yes = ["yes", "y", "ye", "yea", "correct"];
 const no = ["no", "n", "nah", "nope", "fuck off"];
 const errorLogsChannelId = "749358808337481811";
@@ -37,12 +39,11 @@ function sendErrorLog(bot, error, type, msgContent) {
   const stack = error.stack || "N/A";
   const content = msgContent || "N/A";
 
-  const embed = BaseEmbed(message)
+  const embed = new MessageEmbed()
     .setTitle("An error occurred")
     .addField("Name", name, true)
     .addField("Code", code, true)
     .addField("httpStatus", httpStatus, true)
-    .addField("Timestamp", Logger.fullDate(), true)
     .addField("Command executed", content, true)
     .setDescription(`\`\`\`${stack}\`\`\` `)
     .setColor(type === "error" ? "RED" : "ORANGE");
@@ -108,4 +109,5 @@ module.exports = {
   delay,
   promptMessage,
   wrapText,
+  sendErrorLog,
 };

@@ -8,31 +8,28 @@ module.exports = {
     const w = await oldChannel.guild.fetchWebhooks();
     const webhook = w.find((w) => w.name === "Andoi");
     if (!webhook) return;
-    let msg = "";
-    const type = oldChannel.type;
-    let permissions;
-    if (type === "category") {
-      if (oldChannel.name !== newChannel.name) {
-        msg = `Category **${newChannel}** was updated from \`${oldChannel.name}\` to \`${newChannel.name}\``;
-      } else {
-        msg = `Category: ${newChannel} was updated`;
-      }
-    } else {
-      if (oldChannel.name !== newChannel.name) {
-        msg = `Channel **${oldChannel.name}** was renamed to ${newChannel}`;
-      } else if (oldChannel.topic !== newChannel.topic) {
-        msg = `Channel topic in channel ${newChannel} was updated from \`${oldChannel.topic}\` to \`${newChannel.topic}\``;
-      } else {
-        msg = `Channel: ${newChannel} was updated`;
-      }
+    if (oldChannel.type !== newChannel.type) {
+      const embed = logBed(client)
+        .setTitle("Channel type is changed")
+        .setDescription(`${oldChannel.name}'s type is now ${newChannel.type}`);
+      webhook.send(embed);
+    } else if (oldChannel.permissions !== newChannel.permissions) {
+      const oldPermissions = oldChannel.permissions
+        .toArray()
+        .map((oldPermissions) => [oldPermissions]);
+      const newPermissions = newChannel.permissions
+        .toArray()
+        .map((newPermissions) => [newPermissions]);
+      const embed = logBed(client)
+        .setTitle("Channel permissions changed!")
+        .addField("Old permissions:", oldPermissions)
+        .addField("New permissions", newPermissions);
+      webhook.send(embed);
+    } else if (oldChannel.name !== newChannel.name) {
+      const e = logBed(client)
+        .setTitle("Channel name changed")
+        .setDescription(`${oldChannel.name} => ${newChannel.name}`);
+      webhook.send(e);
     }
-
-    const embed = logBed(client)
-      .setTitle("Channel Updated")
-      .setDescription(msg)
-      .setColor("ORANGE")
-      .setTimestamp();
-
-    webhook.send(embed);
   },
 };

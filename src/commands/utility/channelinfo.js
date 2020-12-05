@@ -1,36 +1,25 @@
 const { MessageEmbed } = require("discord.js");
-const moment = require('moment')
-const formatDate = (date) => moment(date).format("MM/DD/YYYY");
 
 module.exports = {
-    name: "channelinfo",
-    description: "Get information about a channel",
-    category: "utility",
-    run: (client, message, args) => {
-        let channel = message.mentions.channels.first();
+  name: "channelinfo",
+  description: "Get information about a channel",
+  category: "utility",
+  run: (client, message, args) => {
+    let channel = client.findChannel(message, args, true);
+    const nsfw = channel.nsfw ? channel.nsfw : "false";
+    const embed = new MessageEmbed()
+      .setColor("BLUE")
+      .setTitle(`Channel Information for ${channel.name}`)
+      .setThumbnail(message.guild.iconURL())
+      .addField("**NSFW**", nsfw, true)
+      .addField("**Channel ID**", channel.id, true)
+      .addField("**Channel Type**", channel.type)
+      .addField(
+        "**Channel Description**",
+        `${channel.topic || "No Description"}`
+      )
+      .addField("**Channel Created At**", channel.createdAt);
 
-        if (!channel) {
-            if (parseInt(args[0]) < 9223372036854775807n) {
-                channel = message.guild.channels.cache.get(args[0]);
-            } else channel = message.channel;
-        }
-
-        const topic = channel.topic ? channel.topic : "No channel topic";
-        const channelId = channel.id;
-        const createdAt = formatDate(channel.createdAt);
-        const type = channel.type === "text" ? "Text Channel" : "Voice Channel";
-
-        const embed = new MessageEmbed()
-            .setColor("BLUE")
-            .setTitle(`${channel.name}'s info`)
-            .addField("Type", type, true)
-            .addField("Channel Topic", topic, true)
-            .addField("Channel Id", channelId, true)
-            .addField("Created At", createdAt, true)
-            .setFooter(message.author.username)
-            .setTimestamp();
-
-
-        message.channel.send(embed);
-    }
+    message.channel.send(embed);
+  },
 };

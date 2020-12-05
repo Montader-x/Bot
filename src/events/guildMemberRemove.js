@@ -4,7 +4,8 @@ module.exports = {
   name: "guildMemberRemove",
   async execute(client, member) {
     if (!member.guild) return;
-    const leaveChannel = await client.getConfig(member.guild).leaveChannel;
+    const conf = await client.getConfig(member.guild);
+    const leaveChannel = conf.leaveChannel;
 
     // not enabled
     if (leaveChannel === null || !leaveChannel) return;

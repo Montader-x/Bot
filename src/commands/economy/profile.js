@@ -10,13 +10,14 @@ module.exports = {
   description: "See the full profile of a user",
   category: "economy",
   run: async (client, message) => {
+    const conf = await client.getConfig(message.guild);
     const user = message.mentions.users.first() || message.author;
     const userId = user.id;
     const guildId = message.guild.id;
     const money = (await getUserMoney(guildId, userId)) || 0;
     const bank = (await getUserBank(guildId, userId)) || 0;
     const inventory = (await getUserInventory(guildId, userId)) || [];
-    const serverPrefix = await db.get(`prefix_${message.guild.id}`);
+    const serverPrefix = conf.prefix;
 
     const embed = new MessageEmbed()
       .setTitle(`${user.username}'s profile`)

@@ -11,7 +11,7 @@ module.exports = {
         `${message.author.tag} You don't have perms to do that.`
       );
 
-    let channel = message.mentions.channels.first(); //mentioned channel
+    let channel = client.findChannel(message, args, false); //mentioned channel
 
     if (!channel) {
       //if channel is not mentioned

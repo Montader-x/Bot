@@ -14,12 +14,12 @@ module.exports = {
       );
     const w = await message.guild.fetchWebhooks();
     const webhook = w.find((w) => w.name === "Andoi");
-    let channel = message.mentions.channels.first(); //mentioned channel
+    let channel = client.findChannel(message, args, false);
 
     if (!channel) {
       //if channel is not mentioned
       if (!webhook) {
-        return;
+        return message.channel.send("There are no logs!");
       } else {
         webhook.delete({ reason: "Idk" });
         message.channel.send("Reseted logs");

@@ -4,8 +4,8 @@ module.exports = {
   async execute(client, member) {
     const user = client.users.cache.get(member.id);
     const membercount = member.guild.memberCount;
-    let welcomeChannel = await client.getConfig(member.guild).welcomeChannel;
-
+    let conf = await client.getConfig(member.guild);
+    const welcomeChannel = conf.welcomeChannel;
     if (welcomeChannel === null) {
       return;
     }
