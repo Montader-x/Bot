@@ -6,9 +6,10 @@ module.exports = {
     const membercount = member.guild.memberCount;
     let conf = await client.getConfig(member.guild);
     const welcomeChannel = conf.welcomeChannel;
-    if (welcomeChannel === null) {
+    if (welcomeChannel === null || welcomeChannel === undefined) {
       return;
     }
+    console.log(welcomeChannel);
 
     const embed = new MessageEmbed()
       .setTitle("👋 New Member!")

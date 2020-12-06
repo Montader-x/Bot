@@ -11,7 +11,8 @@ const client = new Discord.Client({
     ws: {
         properties: { $browser: "Discord Android" },
     },
-});
+})
+require('./utils/user')(client)
 const shardManager = new ShardingManager("./src/index.js", {
     // for ShardingManager options see:
     // https://discord.js.org/#/docs/main/v11/class/ShardingManager

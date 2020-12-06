@@ -59,7 +59,7 @@
     "random": "^2.2.0",
     "randomcolor": "^0.6.2",
     "simple-youtube-api": "^5.2.1",
-    "soundcloud-downloader": "^0.1.6",
+    "soundcloud-downloader": "^0.2.1",
     "srod-v2": "0.0.5",
     "string-progressbar": "^1.0.1",
     "util": "^0.12.3",

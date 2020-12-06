@@ -3,7 +3,7 @@ const { getGuildById, updateGuildById } = require("../../utils/functions");
 module.exports = {
     name: "blacklistedwords",
     description: "Add/remove blacklisted words",
-    category: "admin",
+    category: "config",
     options: ["get", "add", "remove"],
     memberPermissions: ["ADMINISTRATOR"],
     aliases: ["wordsfilter", "filterwords"],

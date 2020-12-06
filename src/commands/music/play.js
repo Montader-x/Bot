@@ -3,7 +3,7 @@ const { youtubeApiKey, SOUNDCLOUD_CLIENT_ID } = require("../../config.json");
 const ytdl = require("ytdl-core");
 const YouTubeAPI = require("simple-youtube-api");
 const youtube = new YouTubeAPI(youtubeApiKey);
-const scdl = require("soundcloud-downloader");
+const scdl = require("soundcloud-downloader").default;
 
 //! credit: Evobot
 //! Coltz was here too :)

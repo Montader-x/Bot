@@ -11,5 +11,6 @@ module.exports = model(
     daily: Date,
     work: Date,
     job: { type: String, default: null },
+    friends: { type: Array, default: null}
   })
 );
