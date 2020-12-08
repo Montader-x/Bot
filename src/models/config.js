@@ -22,5 +22,6 @@ module.exports = model(
         andoichat: { type: String, default: null },
         badwords: { type: Array, default: [] },
         ignored_channels: { type: Array, default: [] },
+        welcomemsg: { type: String, default: "Welcome {user.username} to {server.name} hope you have a good day staying!"}
     })
 );

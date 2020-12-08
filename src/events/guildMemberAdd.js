@@ -9,17 +9,21 @@ module.exports = {
     if (welcomeChannel === null || welcomeChannel === undefined) {
       return;
     }
-    console.log(welcomeChannel);
-
+    const msg = conf.welcomemsg
+    msg.replace('{user.username}', member.user.username)
+    .replace('{server.name}', member.guild.name)
+    .replace('{user}', member)
+    .replace('{user.id}', member.user.id)
+    .replace('{user.tag}', member.user.tag)
+    .replace('{server.members}', member.guild.memberCount)
+    .replace('{server.id}', member.guild.id)
     const embed = new MessageEmbed()
       .setTitle("👋 New Member!")
-      .setDescription(`Welcome ${member} to ${member.guild.name}`)
+      .setDescription(msg)
       .setColor("BLUE")
       .setTimestamp()
-      .addField(`membercount`, membercount)
       .setThumbnail(user.displayAvatarURL())
-      .setImage("https://media.giphy.com/media/OkJat1YNdoD3W/giphy.gif")
-      .setFooter(`UserId: ${member.id} - Tag: ${user.tag}`);
+      .setFooter(`${client.user.username} welcome system!`);
 
     client.channels.cache.get(welcomeChannel).send(embed);
     //! autorole here

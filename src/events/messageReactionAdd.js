@@ -4,7 +4,7 @@ const { MessageEmbed, MessageAttachment } = require("discord.js");
 const fetchAll = require("discord-fetch-all");
 const ticketModel = require("../models/ticket");
 const hastebin = require("hastebin.js");
-const haste = new hastebin({ url: hastebin.com });
+const haste = new hastebin({ url: "https://hastebin.com" });
 module.exports = {
   name: "messageReactionAdd",
   async execute(client, reaction, user) {
