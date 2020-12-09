@@ -4,10 +4,16 @@ const Levels = require("discord-xp");
 const configModel = require("../models/config");
 const Discord = require("discord.js");
 const games = new Map();
+const botModel = require("../models/bot");
 const Blacklist = require("../models/blacklistmodel");
 module.exports = {
   name: "message",
   async execute(client, message) {
+    const botDoc = await botModel.findOne({ name: "Andoi" });
+    if (!botDoc) {
+      let r = new botModel({ name: "Andoi", commandssincerestart: 0 });
+      r.save();
+    }
     if (message.author.bot) return;
     if (message.channel.type === "dm") return;
     const mentions = message.mentions.members;
@@ -71,7 +77,10 @@ module.exports = {
       });
     }
     if (!message.guild) return;
-    if (message.content.startsWith(`<@!${client.user.id}>`) && !message.mentions.everyone) {
+    if (
+      message.content.startsWith(`<@!${client.user.id}>`) &&
+      !message.mentions.everyone
+    ) {
       let mentionEmbed = new MessageEmbed()
         .setColor("BLACK")
         .setTitle("Bot Info")
@@ -195,9 +204,14 @@ module.exports = {
       games: games,
     };
     try {
-      if (command) command.run(client, message, args, ops);
+      if (command) {
+        command.run(client, message, args, ops);
+        botDoc.commandssincerestart += 1;
+        botDoc.total += 1;
+        await botDoc.save();
+      }
     } catch (err) {
-      console.log(err);
+      message.channel.send("An unexpected error has occured!");
     }
   },
 };

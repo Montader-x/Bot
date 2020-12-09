@@ -4,7 +4,7 @@ const Blacklisted = require("../../models/blacklistmodel");
 module.exports = {
   name: "blacklist",
   description: "Remove/add blacklist from a user",
-  category: "botowner",
+  category: "owner",
   usage: "blacklist <option> <level> <user>",
   options: ["add", "remove", "view"],
   ownerOnly: true,

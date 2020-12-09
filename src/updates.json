@@ -1,5 +1,8 @@
 {
- "1": {"name": "fixed", "description": "Fixed some commands not responding"},
- "2": {"name": "added", "description": "enable and disable command or category , mongoDB, settings command, added corona command back"},
- "3": {"name": "removed", "description": "ticket system and reaction roles"}
+  "1": { "name": "fixed", "description": "Profile command" },
+  "2": {
+    "name": "added",
+    "description": "added reaction roles back :D\n, added ticket system back\n, bot now counts how many commands are executed! "
+  },
+  "3": { "name": "removed", "description": "Nothing" }
 }

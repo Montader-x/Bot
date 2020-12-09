@@ -1,36 +1,35 @@
-const ReactionModel = require("../../models/reactionrole.js");
-const { Message, Client, MessageEmbed } = require("discord.js");
+const ReactionsModel = require("../../models/reactionrole");
+
 module.exports = {
-  name: "rrdel",
-  description: "Delete a reaction role",
-  category: "utility",
-  usage: "?rrdel <id of the message> <id of the role thats added to the reaction>",
-  /**
-   * @param {Client} bot
-   * @param {Message} message
-   * @param {String[]} args
-   */
+  name: "rrremove",
+  description: "Add a reaction role",
+  category: "reactions",
+  usage: "rradd <channel_id> <message_id> <emoji>",
+  aliases: ["rrdel", "rrr", "rrdelete"],
   run: async (bot, message, args) => {
-    if (!message.guild.roles.cache.has(args[1]))
-      return message.channel.send(`That role does not exist in this guild!`);
-    if (!args[0])
-      return message.channel.send(
-        `You did not specify the message id of the reaction roles you wish to delete!`
-      );
-    ReactionModel.findOne(
-      { MessageID: args[0], Guild: message.guild.id },
-      async (err, data) => {
-        if (err) throw err;
-        if (!data)
-          return message.channel.send(`That is not a reaction role message!`);
-        ReactionModel.findOneAndDelete(
-          { MessageID: args[0], Guild: message.guild.id },
-          (err) => {
-            if (err) throw err;
-          }
-        );
-        return message.channel.send(`Deleted that reaction role!`);
-      }
-    );
+    const [messageId] = args;
+
+    if (!messageId) {
+      return message.channel.send("You dint provide a message id!");
+    }
+
+    const reaction = await ReactionsModel.findOne({
+      guild_id: message.guild.id,
+      message_id: messageId,
+    });
+
+    if (!reaction) {
+      return message.channel.send("Please provide a valid message id");
+    }
+
+    const channel = message.guild.channels.cache.get(reaction.channel_id);
+    const msg = channel.messages.cache.get(messageId);
+    if (!msg)
+      return message.channel.send("I did not find a message with that id!");
+
+    msg.delete();
+    await ReactionsModel.findOneAndDelete({ message_id: messageId });
+
+    return message.channel.send("Succesfully removed the reaction!");
   },
 };

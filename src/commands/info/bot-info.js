@@ -1,6 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 const moment = require("moment");
 const { mem, cpu, os } = require("node-os-utils");
+const botModel = require("../../models/bot");
 const { stripIndent } = require("common-tags");
 module.exports = {
   name: "botinfo",
@@ -9,7 +10,8 @@ module.exports = {
   category: "info",
   usage: "botinfo",
   run: async (client, message, args) => {
-    const d = moment.duration(message.client.uptime);
+    const d = moment.duration(client.uptime);
+    const bot = await botModel.findOne({ name: "Andoi" });
     const days = d.days() == 1 ? `${d.days()} day` : `${d.days()} days`;
     const hours = d.hours() == 1 ? `${d.hours()} hour` : `${d.hours()} hours`;
     const clientStats = stripIndent`
@@ -36,6 +38,12 @@ module.exports = {
         `\`${message.client.commands.size}\` commands`,
         true
       )
+      .addField(
+        "Commands executed after last restart:",
+        bot.commandssincerestart,
+        true
+      )
+      .addField("Total commands used:", bot.total, true)
       .addField("Aliases", `\`${message.client.aliases.size}\` aliases`, true)
       .addField("Client", `\`\`\`asciidoc\n${clientStats}\`\`\``)
       .addField("Server", `\`\`\`asciidoc\n${serverStats}\`\`\``)
