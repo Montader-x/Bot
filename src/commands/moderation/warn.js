@@ -6,6 +6,7 @@ module.exports = {
   usage: "warn <@mention> <reason>",
   description: "Warn anyone who do not obey the rules",
   run: async (client, message, args) => {
+    const conf = await client.getConfig(message.guild);
     if (!message.member.hasPermission("ADMINISTRATOR")) {
       return message.channel.send(
         "You should have admin perms to use this command!"
@@ -84,5 +85,25 @@ module.exports = {
         }** for ${reason}`
       );
     }
+    let channel = conf.modlog;
+    if (!channel) return;
+
+    const sembed = new MessageEmbed()
+      .setColor(redlight)
+      .setTimestamp()
+      .setThumbnail(target.user.displayAvatarURL({ dynamic: true }))
+      .setFooter(message.guild.name, message.guild.iconURL())
+      .setAuthor(`${message.guild.name} Modlogs`, message.guild.iconURL())
+      .addField("**Moderation**", "report")
+      .addField("**User Reported**", `${user}`)
+      .addField("**User ID**", `${user.user.id}`)
+      .addField("**Reported By**", `${message.member}`)
+      .addField("**Reported in**", `${message.channel}`)
+      .addField("**Reason**", `**${reason || "No Reason"}**`)
+      .addField("**Date**", message.createdAt.toLocaleString());
+
+    var sChannel = message.guild.channels.cache.get(channel);
+    if (!sChannel) return;
+    sChannel.send(sembed);
   },
 };

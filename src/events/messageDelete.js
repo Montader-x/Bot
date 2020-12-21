@@ -2,6 +2,7 @@ const logBed = require("../utils/logBed");
 module.exports = {
   name: "messageDelete",
   async execute(client, message) {
+    if (!message.author) return;
     client.snipes.set(message.channel.id, {
       content: message.content,
       author: message.author,
@@ -13,6 +14,7 @@ module.exports = {
     if (message.author.id === client.user.id) return;
     if (!message.guild) return;
     if (!message) return;
+    if(message.partial) await message.fetch()
     if (message.author === null) return;
     const w = await message.guild.fetchWebhooks();
     const webhook = w.find((w) => w.name === "Andoi");
@@ -20,7 +22,7 @@ module.exports = {
     const embed = logBed(client)
       .setTitle("Message deleted")
       .setDescription(
-        `Message: \`${message}\` was deleted in ${message.channel}`
+        `Message: \`${message}\` was deleted in ${message.channel} by ${message.author.tag}`
       )
       .setTimestamp();
 

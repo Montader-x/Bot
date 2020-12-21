@@ -11,13 +11,20 @@ module.exports = {
     if (leaveChannel === null || !leaveChannel) return;
 
     // channel not found/deleted
-
+    const msg = conf.leavemsg;
+    msg
+      .replace("{user.username}", member.user.username)
+      .replace("{server}", member.guild.name)
+      .replace("{user}", member)
+      .replace("{user.id}", member.user.id)
+      .replace("{user.tag}", member.user.tag)
+      .replace("{server.members}", member.guild.memberCount)
+      .replace("{server.id}", member.guild.id);
     const embed = new MessageEmbed()
       .setTitle("👋 Goodbye!")
-      .setDescription(`User: ${member} has left ${member.guild.name}`)
+      .setDescription(msg)
       .setColor("BLUE")
       .setTimestamp()
-      .setImage("https://media.giphy.com/media/26u4b45b8KlgAB7iM/giphy.gif")
       .setFooter(client.user.username);
 
     client.channels.cache.get(leaveChannel).send({ embed });

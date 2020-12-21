@@ -6,7 +6,7 @@ module.exports = {
     const w = await client.guilds.cache
       .get("740295580886106233")
       .fetchWebhooks();
-    const webhook = w.find((w) => w.name === "Dev logs");
+    const webhook = w.find((w) => w.name === "Guild log");
     if (!webhook) return;
     const logBed = new MessageEmbed().setTitle(
       `i have been removed from ${guild}`

@@ -9,6 +9,7 @@ module.exports = {
     const mentionedMember =
       message.mentions.members.first() ||
       message.guild.members.cache.get(args[0]);
+
     const msRegex = RegExp(/(\d+(s|m|h|w))/);
     if (message.member.hasPermission("MANAGE_ROLES"))
       return message.reply("You need manage roles permissions!");
@@ -66,8 +67,29 @@ module.exports = {
       await muteBe.save();
       const reason = args.slice(2).join(" ");
       message.channel.send(
-        `muted ${mentionedMember} ${reason ? `for **${reason}**` : " "}`
+        `muted ${mentionedMember} ${reason ? `for **${reason}**` : "None"}`
       );
+      let channel = e.modlog;
+      if (!channel) return;
+
+      let embed = new MessageEmbed()
+        .setColor(redlight)
+        .setThumbnail(mutee.user.displayAvatarURL({ dynamic: true }))
+        .setAuthor(`${message.guild.name} Modlogs`, message.guild.iconURL())
+        .addField("**Moderation**", "mute")
+        .addField("**Muted**", mentionedMember.user.username)
+        .addField("**Moderator**", message.author.username)
+        .addField("**Reason**", `${reason || "**No Reason**"}`)
+        .addField("**Date**", message.createdAt.toLocaleString())
+        .setFooter(
+          message.member.displayName,
+          message.author.displayAvatarURL()
+        )
+        .setTimestamp();
+
+      var sChannel = message.guild.channels.cache.get(channel);
+      if (!sChannel) return;
+      sChannel.send(embed);
     }
   },
 };

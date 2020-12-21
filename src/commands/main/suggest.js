@@ -31,8 +31,8 @@ module.exports = {
       .get(sugChannel)
       .send(embed)
       .then((m) => {
-        m.react("✅");
-        m.react("❌");
+        m.react("786561775705129040");
+        m.react("786561514122641408 ");
       });
   },
 };

@@ -9,14 +9,15 @@ module.exports = {
     if (welcomeChannel === null || welcomeChannel === undefined) {
       return;
     }
-    const msg = conf.welcomemsg
-    msg.replace('{user.username}', member.user.username)
-    .replace('{server.name}', member.guild.name)
-    .replace('{user}', member)
-    .replace('{user.id}', member.user.id)
-    .replace('{user.tag}', member.user.tag)
-    .replace('{server.members}', member.guild.memberCount)
-    .replace('{server.id}', member.guild.id)
+    const msg = conf.welcomemsg;
+    msg
+      .replace("{user.username}", member.user.username)
+      .replace("{server}", member.guild.name)
+      .replace("{user}", member)
+      .replace("{user.id}", member.user.id)
+      .replace("{user.tag}", member.user.tag)
+      .replace("{server.members}", member.guild.memberCount)
+      .replace("{server.id}", member.guild.id);
     const embed = new MessageEmbed()
       .setTitle("👋 New Member!")
       .setDescription(msg)

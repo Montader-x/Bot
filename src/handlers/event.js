@@ -7,7 +7,6 @@ module.exports = (client) => {
 
   eventFiles.forEach((file) => {
     const event = require(`../events/${file}`);
-
     if (!event.execute)
       throw new TypeError(
         `[ERROR]: execute function is required for events! (${file})`

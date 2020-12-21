@@ -5,6 +5,7 @@ module.exports = {
     name: "balance",
     description: "balance",
     category: "economy",
+    aliases: ["bal"],
     run: async (client, message) => {
         const user = message.mentions.users.first() || message.author;
         let money = await getUserMoney(message.guild.id, user.id);

@@ -123,14 +123,20 @@ module.exports = {
 
     if (!message.member)
       message.member = await message.guild.fetchMember(message);
+    const customCmds = config.custom;
 
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const cmd = args.shift();
     if (cmd.length === 0) return;
+    if (customCmds) {
+      const customCmd = customCmds.find((x) => x.name === cmd);
+      if (customCmd) message.channel.send(customCmd.response);
+    }
     // Get the command
     let command = client.commands.get(cmd);
     // If none is found, try to find it by alias
     if (!command) command = client.commands.get(client.aliases.get(cmd));
+    if (!command) return;
 
     /**-----------------------[PERMISSIONS]--------------------- */
     if (command.botOwnersOnly) {
@@ -203,15 +209,26 @@ module.exports = {
     const ops = {
       games: games,
     };
+
+    const cross = await client.emojis.cache.find(
+      (emoji) => emoji.name === "andoiCross"
+    );
+    const check = await client.emojis.cache.find(
+      (emoji) => emoji.name === "andoiCheck"
+    );
+    const emo = {
+      cross: cross,
+      check: check,
+    };
     try {
       if (command) {
-        command.run(client, message, args, ops);
+        command.run(client, message, args, ops, emo);
         botDoc.commandssincerestart += 1;
         botDoc.total += 1;
         await botDoc.save();
       }
     } catch (err) {
-      message.channel.send("An unexpected error has occured!");
+      message.channel.send(client.cross + " An unexpected error has occured!");
     }
   },
 };

@@ -1,35 +1,76 @@
-const createBar = require("string-progressbar");
-const { MessageEmbed } = require("discord.js");
-
 module.exports = {
   name: "np",
   description: "Show now playing song",
   category: "music",
   run: (client, message, args) => {
-    const queue = message.client.queue.get(message.guild.id);
-    if (!queue) return message.reply("There is nothing playing.").catch(console.error);
-    const song = queue.songs[0];
-    const seek = (queue.connection.dispatcher.streamTime - queue.connection.dispatcher.pausedTime) / 1000;
-    const left = song.duration - seek;
-
-    let nowPlaying = new MessageEmbed()
-      .setTitle("Now playing")
-      .setDescription(`${song.title}\n${song.url}`)
-      .setColor("#F8AA2A")
-      .setAuthor("Andoi")
-      .addField(
-        "\u200b",
-        new Date(seek * 1000).toISOString().substr(11, 8) +
-          "[" +
-          createBar(song.duration == 0 ? seek : song.duration, seek, 20)[0] +
-          "]" +
-          (song.duration == 0 ? " ◉ LIVE" : new Date(song.duration * 1000).toISOString().substr(11, 8)),
-        false
+    if (!message.member.voice.channel)
+      return message.channel.send(
+        `${client.emotes.error} - You're not in a voice channel !`
       );
 
-    if (song.duration > 0)
-      nowPlaying.setFooter("Time Remaining: " + new Date(left * 1000).toISOString().substr(11, 8));
+    if (!client.player.getQueue(message))
+      return message.channel.send(
+        `${client.emotes.error} - No music currently playing !`
+      );
 
-    return message.channel.send(nowPlaying);
-  }
+    const track = client.player.nowPlaying(message);
+    const filters = [];
+
+    Object.keys(client.player.getQueue(message).filters).forEach(
+      (filterName) => {
+        if (client.player.getQueue(message).filters[filterName])
+          filters.push(filterName);
+      }
+    );
+
+    message.channel.send({
+      embed: {
+        color: "RED",
+        author: { name: track.title },
+        fields: [
+          { name: "Channel", value: track.author, inline: true },
+          {
+            name: "Requested by",
+            value: track.requestedBy.username,
+            inline: true,
+          },
+          {
+            name: "From playlist",
+            value: track.fromPlaylist ? "Yes" : "No",
+            inline: true,
+          },
+
+          { name: "Views", value: track.views, inline: true },
+          { name: "Duration", value: track.duration, inline: true },
+          { name: "Filters activated", value: filters.length, inline: true },
+
+          {
+            name: "Volume",
+            value: client.player.getQueue(message).volume,
+            inline: true,
+          },
+          {
+            name: "Repeat mode",
+            value: client.player.getQueue(message).repeatMode ? "Yes" : "No",
+            inline: true,
+          },
+          {
+            name: "Currently paused",
+            value: client.player.getQueue(message).paused ? "Yes" : "No",
+            inline: true,
+          },
+
+          {
+            name: "Progress bar",
+            value: client.player.createProgressBar(message, {
+              timecodes: true,
+            }),
+            inline: true,
+          },
+        ],
+        thumbnail: { url: track.thumbnail },
+        timestamp: new Date(),
+      },
+    });
+  },
 };

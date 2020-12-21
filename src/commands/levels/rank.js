@@ -9,7 +9,7 @@ module.exports = {
   run: async (client, message, args) => {
     const target = message.mentions.users.first() || message.author; // Grab the target.
 
-    const user = await Levels.fetch(target.id, message.guild.id); // Selects the target from the database.
+    const user = await Levels.fetch(target.id, message.guild.id, true); // Selects the target from the database.
 
     if (!user)
       return message.channel.send(
@@ -21,7 +21,7 @@ module.exports = {
       .setAvatar(target.displayAvatarURL({ format: "png" }))
       .setCurrentXP(user.xp)
       .setRequiredXP(req)
-      .setRank(0, "Level", false)
+      .setRank(0, "ha", false)
       .setStatus(target.presence.status)
       .setLevel(level)
       .setBackground("IMAGE", "https://wallpapercave.com/wp/wp2563380.jpg")

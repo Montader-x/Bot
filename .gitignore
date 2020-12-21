@@ -1,4 +1,4 @@
 node_modules
 template/command.js
 json.sqlite
-tovade.js
+src/config.json

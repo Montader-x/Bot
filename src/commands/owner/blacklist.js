@@ -6,8 +6,7 @@ module.exports = {
   description: "Remove/add blacklist from a user",
   category: "owner",
   usage: "blacklist <option> <level> <user>",
-  options: ["add", "remove", "view"],
-  ownerOnly: true,
+  botOwnersOnly: true,
   run: async (client, message, args) => {
     const type = args[0];
     const member =

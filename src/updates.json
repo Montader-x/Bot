@@ -1,8 +1,0 @@
-{
-  "1": { "name": "fixed", "description": "Profile command" },
-  "2": {
-    "name": "added",
-    "description": "added reaction roles back :D\n, added ticket system back\n, bot now counts how many commands are executed! "
-  },
-  "3": { "name": "removed", "description": "Nothing" }
-}

@@ -1,5 +1,3 @@
-
-
 module.exports = {
   name: "nuke",
   description: "Nuke the current channel, delete all messages of the channel",
@@ -27,6 +25,6 @@ module.exports = {
     channel2.setPosition(position);
     channel2.setTopic(topic);
     channel.delete();
-    channel2.send("Channel has been nuked!");
+    channel2.send("Channel has been nuked! https://imgur.com/LIyGeCR");
   },
 };

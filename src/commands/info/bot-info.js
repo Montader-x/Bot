@@ -43,15 +43,11 @@ module.exports = {
         bot.commandssincerestart,
         true
       )
-      .addField("Total commands used:", bot.total, true)
+      .addField("Total commands used:", `\`${bot.total}\``, true)
       .addField("Aliases", `\`${message.client.aliases.size}\` aliases`, true)
       .addField("Client", `\`\`\`asciidoc\n${clientStats}\`\`\``)
       .addField("Server", `\`\`\`asciidoc\n${serverStats}\`\`\``)
-      .addField("Links", "**[Invite Me](http://aerv.ga/)**")
-      .setFooter(
-        message.member.displayName,
-        message.author.displayAvatarURL({ dynamic: true })
-      )
+      .setFooter("Andoi bot `created by: Tovade#6617 and Potatoexe2930#1771")
       .setTimestamp()
       .setColor(message.guild.me.displayHexColor);
     message.channel.send(embed);

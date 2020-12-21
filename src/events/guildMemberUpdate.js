@@ -10,16 +10,12 @@ module.exports = {
     if (!oldMember.guild) return;
     const avatar = newMember.user.displayAvatarURL({ dynamic: true });
 
-    // not enabled
-
     const embed = logBed(client)
       .setAuthor(`${newMember.user.tag}`, avatar)
       .setTimestamp()
       .setColor("ORANGE");
 
-    // Nickname change
     if (oldMember.nickname !== newMember.nickname) {
-      // Get nickname log
       const oldNickname = oldMember.nickname || "`None`";
       const newNickname = newMember.nickname || "`None`";
       embed
@@ -27,13 +23,10 @@ module.exports = {
         .setDescription(`${newMember}'s **nickname** was changed.`)
         .addField("Nickname", `${newNickname} ➔ ${oldNickname}`);
 
-      // send message
       webhook.send(embed);
     }
 
-    // Role add
     if (oldMember.roles.cache.size > newMember.roles.cache.size) {
-      // Get role log
       const role = newMember.roles.cache
         .difference(oldMember.roles.cache)
         .first();
@@ -41,21 +34,16 @@ module.exports = {
         .setTitle("Member Update: `Role Add`")
         .setDescription(`${newMember} was **given** the ${role} role.`);
 
-      // send message
       webhook.send(embed);
     }
 
-    // Role remove
     if (oldMember.roles.cache.size < newMember.roles.cache.size) {
-      // Get role log
       const role = oldMember.roles.cache
         .difference(newMember.roles.cache)
         .first();
       embed
         .setTitle("Member Update: `Role Remove`")
         .setDescription(`${newMember} was **removed** from ${role} role.`);
-
-      // send message
       webhook.send(embed);
     }
   },

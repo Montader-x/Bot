@@ -1,31 +1,37 @@
-const { MessageEmbed, splitMessage, escapeMarkdown } = require("discord.js");
-
+const { MessageEmbed } = require("discord.js");
 module.exports = {
   name: "queue",
   aliases: ["q"],
   description: "Show the music queue and now playing.",
   category: "music",
   run: (client, message, args) => {
-    const queue = message.client.queue.get(message.guild.id);
-    if (!queue) return message.reply("There is nothing playing.").catch(console.error);
+    if (!message.member.voice.channel)
+      return message.channel.send(
+        `${client.emotes.error} - You're not in a voice channel !`
+      );
 
-    const description = queue.songs.map((song, index) => `${index + 1}. ${escapeMarkdown(song.title)}`);
+    const queue = client.player.getQueue(message);
 
-    let queueEmbed = new MessageEmbed()
-      .setTitle("Andoi Music Queue")
-      .setDescription(description)
-      .setColor("#F8AA2A");
+    if (!client.player.getQueue(message))
+      return message.channel.send(
+        `${client.emotes.error} - No songs currently playing !`
+      );
 
-    const splitDescription = splitMessage(description, {
-      maxLength: 2048,
-      char: "\n",
-      prepend: "",
-      append: ""
-    });
-
-    splitDescription.forEach(async (m) => {
-      queueEmbed.setDescription(m);
-      message.channel.send(queueEmbed);
-    });
-  }
+    message.channel.send(
+      `**Server queue - ${message.guild.name} ${client.emotes.queue}**\nCurrent : ${queue.playing.title} | ${queue.playing.author}\n\n` +
+        (queue.tracks
+          .map((track, i) => {
+            return `**#${i + 1}** - ${track.title} | ${
+              track.author
+            } (requested by : ${track.requestedBy.username})`;
+          })
+          .slice(0, 5)
+          .join("\n") +
+          `\n\n${
+            queue.tracks.length > 5
+              ? `And **${queue.tracks.length - 5}** other songs...`
+              : `In the playlist **${queue.tracks.length}** song(s)...`
+          }`)
+    );
+  },
 };

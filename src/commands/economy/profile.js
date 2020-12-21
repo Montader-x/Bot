@@ -3,6 +3,7 @@ const {
   getUserMoney,
   getUserBank,
   getUserInventory,
+  getUserJob,
 } = require("../../utils/economy");
 
 module.exports = {
@@ -18,10 +19,11 @@ module.exports = {
     const bank = (await getUserBank(guildId, userId)) || 0;
     const inventory = (await getUserInventory(guildId, userId)) || [];
     const serverPrefix = conf.prefix;
-
+const job = await getUserJob(user.id)
     const embed = new MessageEmbed()
       .setTitle(`${user.username}'s profile`)
       .addField("**Money**", money, true)
+      .addField("**Job**", job.job, true)
       .addField("**Bank**", bank, true)
       .addField("**Inventory Items**", inventory.length, true)
       .setDescription(

@@ -1,21 +1,30 @@
-const { canModifyQueue } = require("../../utils/musicfunction");
-
 module.exports = {
   name: "resume",
   aliases: ["r"],
   description: "Resume currently playing music",
   category: "music",
   run: (client, message, args) => {
-    const queue = message.client.queue.get(message.guild.id);
-    if (!queue) return message.reply("There is nothing playing.").catch(console.error);
-    if (!canModifyQueue(message.member, message)) return;
+    if (!message.member.voice.channel)
+      return message.channel.send(
+        `${client.emotes.error} - You're not in a voice channel !`
+      );
 
-    if (!queue.playing) {
-      queue.playing = true;
-      queue.connection.dispatcher.resume();
-      return queue.textChannel.send(`${message.author} ▶ resumed the music!`).catch(console.error);
-    }
+    if (!client.player.getQueue(message))
+      return message.channel.send(
+        `${client.emotes.error} - No music currently playing !`
+      );
 
-    return message.reply("The queue is not paused.").catch(console.error);
-  }
+    if (!client.player.getQueue(message).paused)
+      return message.channel.send(
+        `${client.emotes.error} - The music is already playing !`
+      );
+
+    client.player.resume(message);
+
+    message.channel.send(
+      `${client.emotes.success} - Song ${
+        client.player.getQueue(message).playing.title
+      } **resumed** !`
+    );
+  },
 };

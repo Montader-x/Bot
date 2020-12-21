@@ -1,25 +1,36 @@
-const { canModifyQueue } = require("../../utils/musicfunction");
-
 module.exports = {
   name: "volume",
   aliases: ["v"],
   description: "Change volume of currently playing music",
   category: "music",
   run: (client, message, args) => {
-    const queue = message.client.queue.get(message.guild.id);
+    if (!message.member.voice.channel)
+      return message.channel.send(
+        `${client.emotes.error} - You're not in a voice channel !`
+      );
 
-    if (!queue) return message.reply("There is nothing playing.").catch(console.error);
-    if (!canModifyQueue(message.member, message))
-      return message.reply("You need to join a voice channel first!").catch(console.error);
+    if (!client.player.getQueue(message))
+      return message.channel.send(
+        `${client.emotes.error} - No music currently playing !`
+      );
 
-    if (!args[0]) return message.reply(`🔊 The current volume is: **${queue.volume}%**`).catch(console.error);
-    if (isNaN(args[0])) return message.reply("Please use a number to set volume.").catch(console.error);
-    if (parseInt(args[0]) > 100 || parseInt(args[0]) < 0)
-      return message.reply("Please use a number between 0 - 100.").catch(console.error);
+    if (!args[0] || isNaN(args[0]))
+      return message.channel.send(
+        `${client.emotes.error} - Please enter a valid number !`
+      );
 
-    queue.volume = args[0];
-    queue.connection.dispatcher.setVolumeLogarithmic(args[0] / 100);
+    if (
+      Math.round(parseInt(args[0])) < 1 ||
+      Math.round(parseInt(args[0])) > 100
+    )
+      return message.channel.send(
+        `${client.emotes.error} - Please enter a valid number (between 1 and 100) !`
+      );
 
-    return queue.textChannel.send(`Volume set to: **${args[0]}%**`).catch(console.error);
-  }
+    client.player.setVolume(message, args[0]);
+
+    message.channel.send(
+      `${client.emotes.success} - Volume set to **${parseInt(args[0])}%** !`
+    );
+  },
 };
