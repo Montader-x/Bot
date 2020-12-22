@@ -18,7 +18,7 @@ module.exports = {
 
     if (roll === 6) {
       embed.setDescription(`🎉 Congrats! You won a price of **${price}coins**`);
-      addUserMoney(message.guild.id, message.author.id, price);
+      addUserMoney(message.author.id, price);
     } else {
       embed.setDescription(
         `You need to land a **6** to get a price of **${price}coins**`

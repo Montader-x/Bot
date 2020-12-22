@@ -1,5 +1,4 @@
 const configModel = require("../../models/config");
-const { default_prefix } = require("../../config.json");
 
 module.exports = {
   name: "prefix",

@@ -3,10 +3,7 @@ module.exports = {
   name: "ready",
   async execute(client) {
     console.log(`Hi, ${client.user.username} is now online!`);
-    const re = await botModel.findOneAndUpdate({
-      name: "Andoi",
-      commandssincerestart: 1,
-    });
+    await botModel.findOneAndUpdate({ name: "Andoi", commandssincerestart: 0 });
     setInterval(() => {
       const statuses = [
         `a!help || ${client.guilds.cache.size} servers.`,

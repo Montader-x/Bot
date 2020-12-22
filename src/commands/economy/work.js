@@ -16,7 +16,7 @@ module.exports = {
     const user = message.author;
     const timeout = 3600000;
     const amount = Math.floor(Math.random() * 500); // i dont have a brain so yeh
-    const work = await getUserWork(message.guild.id, user.id);
+    const work = await getUserWork(user.id);
     const job = await getUserJob(user.id);
 
     if (work !== null && timeout - (Date.now() - work) > 0) {
@@ -43,8 +43,8 @@ module.exports = {
 
         message.channel.send(embed);
 
-        addUserMoney(message.guild.id, user.id, amount);
-        setUserWork(message.guild.id, user.id, Date.now());
+        addUserMoney(user.id, amount);
+        setUserWork(user.id, Date.now());
       }
     }
   },

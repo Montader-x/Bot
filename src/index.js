@@ -1,6 +1,11 @@
 const { imdbKey, dblkey } = require("../config.json");
 const imdb = require("imdb-api");
 const Discord = require("discord.js");
+const http = require("http");
+const express = require("express");
+const app = express();
+const server = http.createServer(app);
+const { addUserMoney } = require("./utils/economy");
 const fs = require("fs");
 const token = require(`../config.json`);
 const { Client, MessageEmbed, Guild, ShardingManager } = require("discord.js");
@@ -21,6 +26,7 @@ const { Player } = require("discord-player");
 require("./utils/client")(client);
 const emotes = require("./JSON/emojis.json");
 const { init } = require("./utils/mongoose");
+const Topgg = require("@top-gg/sdk");
 const filters = require("./JSON/filters.json");
 client.emotes = emotes;
 client.filters = filters;
@@ -33,7 +39,35 @@ const logs = require("discord-logs");
 logs(client);
 if (dblkey && dblkey.length !== 0) {
   const d = require("dblapi.js");
-  const dbl = new d(dblkey, client);
+  const dbl = new d(
+    dblkey,
+    { webhookAuth: "AndoiBot", webhookServer: server },
+    client
+  );
+  dbl.webhook.on("ready", (hook) => {
+    console.log(`Webhook is running on ${hook}`);
+  });
+
+  dbl.webhook.on("vote", async (vote) => {
+    let eeeeeeee = {
+      false: 1000,
+      true: 2000,
+    };
+    const user =
+      client.users.cache.get((u) => u.id === vote.user) ||
+      (await client.users.fetch(vote.user));
+    const ee = new MessageEmbed()
+      .setTitle(`${user.username} Thanks for voting!`)
+      .setDescription(
+        `You got ${eeeeeeee[vote.isWeekend]} coins and unlocked 2 commands!`
+      );
+    await client.channels.cache.get("790923255250419722").send(ee);
+    if (vote.isWeekend === false) {
+      await addUserMoney(user.id, 1000);
+    } else {
+      await addUserMoney(user.id, 2000);
+    }
+  });
   client.on("ready", () => {
     setInterval(() => {
       dbl.postStats(client.guilds.size);
@@ -161,3 +195,4 @@ player
         message.channel.send(`Something went wrong... Error: ${error}`);
     }
   });
+server.listen(25635);

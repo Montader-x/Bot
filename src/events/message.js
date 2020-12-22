@@ -7,10 +7,11 @@ const games = new Map();
 const botModel = require("../models/bot");
 const Blacklist = require("../models/blacklistmodel");
 const d = require("dblapi.js");
-const dbl = new d(dblkey, client);
+
 module.exports = {
   name: "message",
   async execute(client, message) {
+    const dbl = new d(dblkey, client);
     const botDoc = await botModel.findOne({ name: "Andoi" });
     if (!botDoc) {
       let r = new botModel({ name: "Andoi", commandssincerestart: 0 });
@@ -140,17 +141,24 @@ module.exports = {
     if (!command) command = client.commands.get(client.aliases.get(cmd));
     if (!command) return;
     if (command.votersOnly && command.votersOnly === true) {
-      dbl.hasVoted(message.author.id).then((voted) => {
-        if (!voted)
-          return message.channel.send(
-            new MessageEmbed()
-              .setTitle(`Click me`)
-              .setDescription(
-                "You did not vote for me yet click on the title to vote for me!"
-              )
-              .setURL("https://top.gg/bot/728694375739162685/vote")
-          );
-      });
+      let hasVoted = false;
+
+      const voted = await dbl.hasVoted(message.author.id);
+
+      const e = new MessageEmbed()
+        .setTitle(`Click me`)
+        .setDescription(
+          "You did not vote for me yet click on the title to vote for me!"
+        )
+        .setURL("https://top.gg/bot/728694375739162685/vote");
+
+      if (voted) {
+        hasVoted = true;
+      }
+
+      if (hasVoted === false) {
+        return message.channel.send(e);
+      }
     }
     /**-----------------------[PERMISSIONS]--------------------- */
     if (command.botOwnersOnly) {

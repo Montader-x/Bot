@@ -11,10 +11,9 @@ module.exports = {
     if (leaveChannel === null || !leaveChannel) return;
 
     // channel not found/deleted
-    const msg = conf.leavemsg;
-    msg
+    const msg = conf.leavemsg
       .replace("{user.username}", member.user.username)
-      .replace("{server}", member.guild.name)
+      .replace("{server.name}", member.guild.name)
       .replace("{user}", member)
       .replace("{user.id}", member.user.id)
       .replace("{user.tag}", member.user.tag)

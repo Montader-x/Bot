@@ -18,7 +18,7 @@ module.exports = {
     const storeItems = await getStoreItems(guildId);
     const usersInventory = await getUserInventory(guildId, message.author.id);
     const prefix = e.prefix;
-    const usersMoney = await getUserMoney(guildId, message.author.id);
+    const usersMoney = await getUserMoney(message.author.id);
     let query = args[0];
 
     if (storeItems === null || !storeItems[0])
@@ -45,7 +45,7 @@ module.exports = {
       );
 
     setUserInventory(guildId, message.author.id, item.name);
-    removeUserMoney(guildId, message.author.id, item.price);
+    removeUserMoney(message.author.id, item.price);
 
     message.channel.send(
       `Successfully bought **${item.name}** paid **${item.price}**`

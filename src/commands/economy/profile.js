@@ -15,11 +15,11 @@ module.exports = {
     const user = message.mentions.users.first() || message.author;
     const userId = user.id;
     const guildId = message.guild.id;
-    const money = (await getUserMoney(guildId, userId)) || 0;
-    const bank = (await getUserBank(guildId, userId)) || 0;
-    const inventory = (await getUserInventory(guildId, userId)) || [];
+    const money = (await getUserMoney(userId)) || 0;
+    const bank = (await getUserBank(userId)) || 0;
+    const inventory = (await getUserInventory(userId)) || [];
     const serverPrefix = conf.prefix;
-const job = await getUserJob(user.id)
+    const job = await getUserJob(user.id);
     const embed = new MessageEmbed()
       .setTitle(`${user.username}'s profile`)
       .addField("**Money**", money, true)

@@ -9,10 +9,9 @@ module.exports = {
     if (welcomeChannel === null || welcomeChannel === undefined) {
       return;
     }
-    const msg = conf.welcomemsg;
-    msg
+    const msg = conf.welcomemsg
       .replace("{user.username}", member.user.username)
-      .replace("{server}", member.guild.name)
+      .replace("{server.name}", member.guild.name)
       .replace("{user}", member)
       .replace("{user.id}", member.user.id)
       .replace("{user.tag}", member.user.tag)

@@ -1,12 +1,13 @@
 const moment = require("moment");
 const storeModel = require("../models/store");
 const userModel = require("../models/userEco");
+const inventorymodel = require("../models/inventory");
 /**
  * @param {string} guildId
  * @param {string} userId
  * @returns {Promise}
  */
-const getUserMoney = async (guildId, userId) => {
+const getUserMoney = async (userId) => {
   const user = await userModel.findOne({ userID: userId });
   if (!user) {
     const aa = new userModel({ userID: userId });
@@ -20,7 +21,7 @@ const getUserMoney = async (guildId, userId) => {
  * @param {string} userId
  * @returns {Promise}
  */
-const getUserBank = async (guildId, userId) => {
+const getUserBank = async (userId) => {
   const user = await userModel.findOne({ userID: userId });
   if (!user) {
     const aa = new userModel({ userID: userId });
@@ -35,10 +36,10 @@ const getUserBank = async (guildId, userId) => {
  * @param {string} userId
  * @param {number} amount
  */
-const addUserMoney = async (guildId, userId, amount) => {
+const addUserMoney = async (userId, amount) => {
   const user = await userModel.findOne({ userID: userId });
   if (!user) {
-    const aa = new userModel({ userID: userId });
+    const aa = new userModel({ userID: userId, money: amount });
     aa.save();
   }
   const currentMon = user.money;
@@ -50,7 +51,7 @@ const addUserMoney = async (guildId, userId, amount) => {
  * @param {string} userId
  * @param {number} amount
  */
-const addUserBank = async (guildId, userId, amount) => {
+const addUserBank = async (userId, amount) => {
   const user = await userModel.findOne({ userID: userId });
   if (!user) {
     const aa = new userModel({ userID: userId });
@@ -65,7 +66,7 @@ const addUserBank = async (guildId, userId, amount) => {
  * @param {String} userId
  * @param {Number} amount
  */
-const removeUserBank = async (guildId, userId, amount) => {
+const removeUserBank = async (userId, amount) => {
   const user = await userModel.findOne({ userID: userId });
   if (!user) {
     const aa = new userModel({ userID: userId });
@@ -80,7 +81,7 @@ const removeUserBank = async (guildId, userId, amount) => {
  * @param {string} userId
  * @param {number} amount
  */
-const removeUserMoney = async (guildId, userId, amount) => {
+const removeUserMoney = async (userId, amount) => {
   const user = await userModel.findOne({ userID: userId });
   if (!user) {
     const aa = new userModel({ userID: userId });
@@ -94,7 +95,7 @@ const removeUserMoney = async (guildId, userId, amount) => {
  * @param {string} guildId
  * @param {string} userId
  */
-const getUserDaily = async (guildId, userId) => {
+const getUserDaily = async (userId) => {
   const user = await userModel.findOne({ userID: userId });
   if (!user) {
     const aa = new userModel({ userID: userId });
@@ -108,7 +109,7 @@ const getUserDaily = async (guildId, userId) => {
  * @param {string} userId
  * @param {string} date
  */
-const setUserDaily = async (guildId, userId, date) => {
+const setUserDaily = async (userId, date) => {
   const user = await userModel.findOne({ userID: userId });
   if (!user) {
     const aa = new userModel({ userID: userId });
@@ -121,7 +122,7 @@ const setUserDaily = async (guildId, userId, date) => {
  * @param {string} guildId
  * @param {string} userId
  */
-const getUserWork = async (guildId, userId) => {
+const getUserWork = async (userId) => {
   const user = await userModel.findOne({ userID: userId });
   if (!user) {
     const aa = new userModel({ userID: userId });
@@ -136,7 +137,7 @@ const getUserWork = async (guildId, userId) => {
  * @param {string} userId
  * @param {string} date
  */
-const setUserWork = async (guildId, userId, date) => {
+const setUserWork = async (userId, date) => {
   const user = await userModel.findOne({ userID: userId });
   if (!user) {
     const aa = new userModel({ userID: userId });
@@ -150,10 +151,11 @@ const setUserWork = async (guildId, userId, date) => {
  * @param {string} userId
  */
 const getUserInventory = async (guildId, userId) => {
-  const user = await userModel.findOne({ userID: userId });
+  let user = await inventorymodel.findOne({ guild: guildId, user: userId });
   if (!user) {
-    const aa = new userModel({ userID: userId });
+    const aa = new userModel({ guildId, user: userId });
     aa.save();
+    return aa.inventory;
   }
   return user.inventory;
 };
@@ -179,9 +181,13 @@ const setUserJob = async (userId, job) => {
  * @param {string} newItem
  */
 const setUserInventory = async (guildId, userId, newItem) => {
-  const user = await userModel.findOne({ userID: userId });
+  const user = await inventorymodel.findOne({ guild: guildId, user: userId });
   if (!user) {
-    const aa = new userModel({ userID: userId });
+    const aa = new userModel({
+      guild: guildId,
+      user: userId,
+      inventory: [newItem],
+    });
     aa.save();
   }
   const currentMon = user.money;
