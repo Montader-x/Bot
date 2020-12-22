@@ -18,12 +18,11 @@ module.exports = {
       );
     }
 
-    let target = message.guild.members(
+    let target =
       message.mentions.members.first() ||
-        message.guild.members.cache.find((m) => m.user.username === args[0]) ||
-        message.guild.members.cache.find((m) => m.user.tag === args[0]) ||
-        message.guild.members.cache.find((m) => m.user.id === args[0])
-    );
+      message.guild.members.cache.find((m) => m.user.username === args[0]) ||
+      message.guild.members.cache.find((m) => m.user.tag === args[0]) ||
+      message.guild.members.cache.find((m) => m.user.id === args[0]);
 
     if (!target) {
       return message.channel.send(
@@ -50,7 +49,7 @@ module.exports = {
 
     message.channel.send(embed1);
 
-    target.kick(args[1]);
+    target.kick(reason);
     let channel = conf.modlog;
     if (!channel) return;
 

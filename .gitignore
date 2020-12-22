@@ -1,4 +1,4 @@
 node_modules
 template/command.js
 json.sqlite
-src/config.json
+config.json

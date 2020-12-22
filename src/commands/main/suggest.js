@@ -8,8 +8,8 @@ module.exports = {
   category: "utility",
   run: async (client, message, args) => {
     let e = await client.getConfig(message.guild);
-    let sugChannel = e.suggestChan;
-    if (sugChannel === null) {
+    let sugChannel = e?.suggestChan;
+    if (!sugChannel) {
       return message.channel.send("The suggestion channel hasnt been set yet!");
     }
 

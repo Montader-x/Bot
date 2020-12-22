@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const { owners } = require("../../config.json");
+const { owners } = require("../../../config.json");
 const {
   getStoreItems,
   setStoreItems,

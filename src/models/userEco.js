@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-const { userDefaultStats } = require("../config.json");
+const { userDefaultStats } = require("../../config.json");
 
 module.exports = model(
   "userEconomy",
@@ -11,6 +11,6 @@ module.exports = model(
     daily: Date,
     work: Date,
     job: { type: String, default: null },
-    friends: { type: Array, default: null}
+    friends: { type: Array, default: null },
   })
 );

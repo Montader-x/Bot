@@ -1,9 +1,9 @@
 const DIG = require("discord-image-generation");
 const Discord = require("discord.js");
 module.exports = {
-  name: "trash",
+  name: "stonks",
   category: "image",
-  description: "Trash a user LMAO!",
+  description: "stonk a user LMAO!",
   run: async (client, message, args) => {
     const m = client.findMember(message, args, true);
     let avatar = m.user.displayAvatarURL({
@@ -11,9 +11,9 @@ module.exports = {
       format: "png",
     });
 
-    let img = await new DIG.Trash().getImage(avatar, 5);
+    let img = await new DIG.Stonk().getImage(avatar);
 
-    let attach = new Discord.MessageAttachment(img, "trash.png");
+    let attach = new Discord.MessageAttachment(img, "stonk.png");
     message.channel.send(attach);
   },
 };

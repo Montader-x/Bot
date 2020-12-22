@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-const { configDefaultSettings } = require("../config.json");
+const { configDefaultSettings } = require("../../config.json");
 
 module.exports = model(
   "config",

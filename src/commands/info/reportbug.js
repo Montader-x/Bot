@@ -1,4 +1,4 @@
-const { bugchannel } = require("../../config.json");
+const { bugchannel } = require("../../../config.json");
 const { MessageEmbed } = require("discord.js");
 module.exports = {
   name: "report-bug",

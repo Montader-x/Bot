@@ -1,8 +1,8 @@
-const { imdbKey } = require("./config.json");
+const { imdbKey, dblkey } = require("../config.json");
 const imdb = require("imdb-api");
 const Discord = require("discord.js");
 const fs = require("fs");
-const token = require(`./config.json`);
+const token = require(`../config.json`);
 const { Client, MessageEmbed, Guild, ShardingManager } = require("discord.js");
 const { GiveawaysManager } = require("discord-giveaways");
 const client = new Discord.Client({
@@ -31,22 +31,24 @@ const { sendErrorLog } = require("./utils/functions");
 require("./utils/config.js")(client);
 const logs = require("discord-logs");
 logs(client);
-const d = require('dblapi.js')
-const dbl = new d("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcyODY5NDM3NTczOTE2MjY4NSIsImJvdCI6dHJ1ZSwiaWF0IjoxNjAxODkxNTQyfQ.nDIyXm8MqKAzgcpMtO2JkntRvnmLA3FOVnirYnszjmA", client)
+if (dblkey && dblkey.length !== 0) {
+  const d = require("dblapi.js");
+  const dbl = new d(dblkey, client);
+  client.on("ready", () => {
+    setInterval(() => {
+      dbl.postStats(client.guilds.size);
+    }, 1800000);
+  });
+}
 client.commands = new Discord.Collection();
 client.cooldowns = new Discord.Collection();
 client.aliases = new Discord.Collection();
 client.queue = new Map();
-client.on('ready', () => {
-  setInterval(() => {
-    dbl.postStats(client.guilds.size);
-}, 1800000);
 
-})
 client.snipes = new Map();
 client.afk = new Map();
 client.imdb = new imdb.Client({ apiKey: imdbKey });
-client.config = require("./config.json");
+client.config = require("../config.json");
 const GiveawayManagerWithShardSupport = class extends GiveawaysManager {
   // Refresh storage method is called when the database is updated on one of the shards
   async refreshStorage() {

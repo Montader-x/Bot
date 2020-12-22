@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { Mongo } = require("../config.json");
+const { Mongo } = require("../../config.json");
 
 module.exports = {
   init: () => {

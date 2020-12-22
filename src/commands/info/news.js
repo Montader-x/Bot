@@ -1,6 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 const fetch = require("node-fetch");
-const { news } = require("../../config.json");
+const { news } = require("../../../config.json");
 
 module.exports = {
   name: "news",

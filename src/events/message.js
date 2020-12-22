@@ -1,11 +1,13 @@
 const { MessageEmbed } = require("discord.js");
-const { owners } = require("../config.json");
+const { owners, dblkey } = require("../../config.json");
 const Levels = require("discord-xp");
 const configModel = require("../models/config");
 const Discord = require("discord.js");
 const games = new Map();
 const botModel = require("../models/bot");
 const Blacklist = require("../models/blacklistmodel");
+const d = require("dblapi.js");
+const dbl = new d(dblkey, client);
 module.exports = {
   name: "message",
   async execute(client, message) {
@@ -137,7 +139,19 @@ module.exports = {
     // If none is found, try to find it by alias
     if (!command) command = client.commands.get(client.aliases.get(cmd));
     if (!command) return;
-
+    if (command.votersOnly && command.votersOnly === true) {
+      dbl.hasVoted(message.author.id).then((voted) => {
+        if (!voted)
+          return message.channel.send(
+            new MessageEmbed()
+              .setTitle(`Click me`)
+              .setDescription(
+                "You did not vote for me yet click on the title to vote for me!"
+              )
+              .setURL("https://top.gg/bot/728694375739162685/vote")
+          );
+      });
+    }
     /**-----------------------[PERMISSIONS]--------------------- */
     if (command.botOwnersOnly) {
       const botOwnersOnly = command.botOwnersOnly;

@@ -3,7 +3,7 @@ const { Schema, model } = require("mongoose");
 module.exports = model(
   "updates",
   new Schema({
-    name: "Andoi",
+    name: { type: String, default: "Andoi" },
     updates: Array,
   })
 );
